@@ -72,9 +72,6 @@ if isSim
     
         cfg.dataType    = sonVec{iSon};
         job.dataType    = cfg.dataType;
-        % job.dataType    = 'sham';
-        % job.dataType    = 'dACC';
-        % job.dataType    = 'aIns';
     
         % Model from which to load simulations:
         job.iMod        = cfg.iMod; % number of models to fit
@@ -176,12 +173,11 @@ plotCfg.title   = cfg.plotTitle;
 
 plotCfg.addPoints  = true;
 plotCfg.addLines   = false;
-% plotCfg.addLines   = true;
 
 plotCfg.colMat  = sonColMat; % overwrite colour map
 custom_barplot(plotCfg, pStayValencedSon(validSubs, :));
 saveas(gcf, fullfile(dirs.plot, 'barplot_pStay', sprintf('barplot_pStay_valenced_son_%s.png', cfg.plotHandle)));
-if isElsa; saveas(gcf, fullfile(dirs.elsa, sprintf('barplot_pStay_valenced_son_%s.svg', cfg.plotHandle))); end
+if isElsa; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_valenced_son_%s.svg', cfg.plotHandle))); end
 
 % Close:
 pause(pauseDur);
@@ -203,12 +199,11 @@ plotCfg.title   = cfg.plotTitle;
 
 plotCfg.addPoints  = true;
 plotCfg.addLines   = false;
-% plotCfg.addLines   = true;
 
 plotCfg.colMat  = sonColMat; % overwrite colour map
 custom_barplot(plotCfg, pStayValencedRespSon(validSubs, :));
 saveas(gcf, fullfile(dirs.plot, 'barplot_pStay', sprintf('barplot_pStay_valenced_resp_son_%s.png', cfg.plotHandle)));
-if isElsa; saveas(gcf, fullfile(dirs.elsa, sprintf('barplot_pStay_valenced_resp_son_%s.svg', cfg.plotHandle))); end
+if isElsa; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_valenced_resp_son_%s.svg', cfg.plotHandle))); end
 
 % Close:
 pause(pauseDur);
@@ -230,12 +225,11 @@ plotCfg.title   = cfg.plotTitle;
 
 plotCfg.addPoints  = true;
 plotCfg.addLines   = false;
-% plotCfg.addLines   = true;
 
 plotCfg.colMat  = sonColMat; % overwrite colour map
 custom_barplot(plotCfg, pStayRewGoPunNoGoSon(validSubs, :));
 saveas(gcf, fullfile(dirs.plot, 'barplot_pStay', sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle)));
-if isElsa; saveas(gcf, fullfile(dirs.elsa, sprintf('barplot_pStay_rewgo_punnogo_son_%s.svg', cfg.plotHandle))); end
+if isElsa; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_rewgo_punnogo_son_%s.svg', cfg.plotHandle))); end
 
 % Close:
 pause(pauseDur);
@@ -257,19 +251,18 @@ plotCfg.title   = cfg.plotTitle;
 
 plotCfg.addPoints  = true;
 plotCfg.addLines   = false;
-% plotCfg.addLines   = true;
 
 plotCfg.colMat  = sonColMat; % overwrite colour map
 custom_barplot(plotCfg, pStayNeutralSon(validSubs, :));
 saveas(gcf, fullfile(dirs.plot, 'barplot_pStay', sprintf('barplot_pStay_neutral_son_%s.png', cfg.plotHandle)));
-if isElsa; saveas(gcf, fullfile(dirs.elsa, sprintf('barplot_pStay_neutral_son_%s.svg', cfg.plotHandle))); end
+if isElsa; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_neutral_son_%s.svg', cfg.plotHandle))); end
 
 % Close:
 pause(pauseDur);
 close gcf
 
 % ----------------------------------------------------------------------- %
-%% 05) Plot p(Stay) ~ neutral outcomes x response:
+%% 05) Plot p(Stay) ~ neutral outcomes x past response:
 
 sonColMat       = [229 229 229; 211 67 110; 254 186 128] /255; % grey, red, orange
 sonColMat       = repmat(sonColMat, 4, 1); % duplicate;
@@ -289,7 +282,7 @@ plotCfg.addLines   = false;
 plotCfg.colMat  = sonColMat; % overwrite colour map
 custom_barplot(plotCfg, pStayNeutralRespSon(validSubs, :));
 saveas(gcf, fullfile(dirs.plot, 'barplot_pStay', sprintf('barplot_pStay_neutral_resp_son_%s.png', cfg.plotHandle)));
-if isElsa; saveas(gcf, fullfile(dirs.elsa, sprintf('barplot_pStay_neutral_resp_son_%s.svg', cfg.plotHandle))); end
+if isElsa; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_neutral_resp_son_%s.svg', cfg.plotHandle))); end
 
 % Close:
 pause(pauseDur);
@@ -311,12 +304,11 @@ plotCfg.title   = cfg.plotTitle;
 
 plotCfg.addPoints  = true;
 plotCfg.addLines   = false;
-% plotCfg.addLines   = true;
 
 plotCfg.colMat  = sonColMat; % overwrite colour map
 custom_barplot(plotCfg, pStayValenceSon(validSubs, :));
 saveas(gcf, fullfile(dirs.plot, 'barplot_pStay', sprintf('barplot_pStay_valence_son_%s.png', cfg.plotHandle)));
-if isElsa; saveas(gcf, fullfile(dirs.elsa, sprintf('barplot_pStay_valence_son_%s.svg', cfg.plotHandle))); end
+if isElsa; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_valence_son_%s.svg', cfg.plotHandle))); end
 
 % Close:
 pause(pauseDur);

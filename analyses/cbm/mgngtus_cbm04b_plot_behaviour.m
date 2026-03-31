@@ -12,10 +12,7 @@
 % Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 % Should work in MATLAB 2023b.
 
-% we are here:
-% cd C:/Users/johan/OneDrive/Documents/AACollaborations/MGNGUltrasoundNomiki/analyses/cbm
-
-clear all; close all; clc
+% clear all; close all; clc
 
 % ----------------------------------------------------------------------- %
 %% 00a) Initialize directories:
@@ -45,7 +42,7 @@ cfg.dataType    = 'sham';
 
 % isSim           = false;
 isSim           = true;
-cfg.iMod        = 19;
+cfg.iMod        = 7; % winning model is M7
 
 % -------------------------- %
 % III) Plotting settings:
@@ -59,7 +56,7 @@ savePNG         = true;
 saveSVG         = true;
 
 % ----------------------------------------------------------------------- %
-% 00d) Option A: Load and extract empirical data:
+%% 00d) Option A: Load and extract empirical data:
 
 % Load data:
 fprintf('*** Load %s data ***\n', cfg.dataType);
@@ -76,7 +73,7 @@ cfg.plotTitle   = sprintf('Empirical data (%s)', cfg.dataType);
 cfg.plotHandle  = sprintf('empirical_%s', cfg.dataType);
 
 % ----------------------------------------------------------------------- %
-% 00e) Option B: Load simulated data:
+%% 00e) Option B: Load simulated data:
 
 % isSim = true;
 % isSim = false;
@@ -93,9 +90,6 @@ if isSim
     job.parType     = 'hbi'; % lap, hbi
     
     job.dataType    = cfg.dataType;
-    % job.dataType    = 'sham';
-    % job.dataType    = 'dACC';
-    % job.dataType    = 'aIns';
     
     job.nIter       = 100;
     
@@ -113,7 +107,7 @@ if isSim
 end
 
 % ----------------------------------------------------------------------- %
-% 00f) Select subjects:
+%% 00f) Select subjects:
 
 % Run this section to generate 'validSubs' to be used in following sections
 
@@ -149,82 +143,88 @@ pause(pauseDur);
 close gcf
 
 % ----------------------------------------------------------------------- %
-% 01b) Plot learning curves: Accuracy
+%% 01b) Plot learning curves: Accuracy
 
-% plotCfg         = [];
-% plotCfg.xLab    = 'Trial';
-% plotCfg.yLab    = 'p(Correct)';
-% plotCfg.title   = cfg.plotTitle;
-% plotCfg.colMat  = [0 113 116; 201 61 33; 0 113 116; 201 61 33] ./ 255; % dark green, red, dark green, red
-% 
-% custom_lineplot(plotCfg, aggrData.pCorrectSubCondRep(validSubs, :, :));
-% 
-% % Save:
-% if savePNG; saveas(gcf, fullfile(dirs.plot, 'lineplot_pCorrect', sprintf('lineplot_pCorrect_cond_rep_%s.png', cfg.plotHandle))); end
-% if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pCorrect_cond_rep_%s.png', cfg.plotHandle))); end
-% 
-% % Close:
-% pause(pauseDur);
-% close gcf
+plotCfg         = [];
+plotCfg.xLab    = 'Trial';
+plotCfg.yLab    = 'p(Correct)';
+plotCfg.title   = cfg.plotTitle;
+plotCfg.colMat  = [0 113 116; 201 61 33; 0 113 116; 201 61 33] ./ 255; % dark green, red, dark green, red
 
-% ----------------------------------------------------------------------- %
-% ----------------------------------------------------------------------- %
-% ----------------------------------------------------------------------- %
-% 02a) Plot bar plots: p(Go)
+custom_lineplot(plotCfg, aggrData.pCorrectSubCondRep(validSubs, :, :));
 
-% plotCfg         = [];
-% plotCfg.xLab    = 'Condition';
-% % plotCf.xTick        = 1:4;
-% % plotCfg.xTickLabel  = {'G2W', 'G2A', 'NG2W', 'NG2A'};
-% plotCfg.xTick       = [1.5 3.5];
-% plotCfg.xTickLabel  = {'Go', 'NoGo'};
-% plotCfg.yLab    = 'p(Go)';
-% plotCfg.yLim    = [0 1];
-% plotCfg.title   = cfg.plotTitle;
-% plotCfg.colMat  = [0 113 116; 201 61 33; 0 113 116; 201 61 33] ./ 255; % dark green, red, dark green, red
-% 
-% plotCfg.addPoints  = true;
-% plotCfg.addLines   = false;
-% 
-% custom_barplot(plotCfg, aggrData.pGoSubCond(validSubs, :));
-% 
-% % Save:
-% if savePNG; saveas(gcf, fullfile(dirs.plot, 'barplot_pGo', sprintf('barplot_pGo_cond_%s.png', cfg.plotHandle))); end
-% if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pGo_cond_%s.svg', cfg.plotHandle))); end
+% Save:
+if savePNG; saveas(gcf, fullfile(dirs.plot, 'lineplot_pCorrect', sprintf('lineplot_pCorrect_cond_rep_%s.png', cfg.plotHandle))); end
+if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pCorrect_cond_rep_%s.png', cfg.plotHandle))); end
 
 % Close:
-% pause(pauseDur);
-% close gcf
+pause(pauseDur);
+close gcf
 
 % ----------------------------------------------------------------------- %
-% 02b) Plot bar plots: p(Correct)
+% ----------------------------------------------------------------------- %
+% ----------------------------------------------------------------------- %
+% ----------------------------------------------------------------------- %
+%% 02a) Plot bar plots: p(Go)
 
-% plotCfg         = [];
-% plotCfg.xLab    = 'Condition';
-% % plotCf.xTick        = 1:4;
-% % plotCfg.xTickLabel  = {'G2W', 'G2A', 'NG2W', 'NG2A'};
-% plotCfg.xTick       = [1.5 3.5];
-% plotCfg.xTickLabel  = {'Go', 'NoGo'};
-% plotCfg.yLab    = 'p(Correct)';
-% plotCfg.yLim    = [0 1];
-% plotCfg.title   = cfg.plotTitle;
-% plotCfg.colMat  = [0 113 116; 201 61 33; 0 113 116; 201 61 33] ./ 255; % dark green, red, dark green, red
-% 
-% plotCfg.addPoints  = true;
-% plotCfg.addLines   = false;
-% 
-% custom_barplot(plotCfg, aggrData.pCorrectSubCond(validSubs, :));
-% 
-% % Save:
-% if savePNG; saveas(gcf, fullfile(dirs.plot, 'barplot_pCorrect', sprintf('barplot_pCorrect_cond_%s.png', cfg.plotHandle))); end
-% if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pCorrect_cond_%s.svg', cfg.plotHandle))); end
-% 
-% % Close:
-% pause(pauseDur);
-% close gcf
+plotCfg         = [];
+plotCfg.xLab    = 'Condition';
+
+% Option A: label all 4 conditions
+% plotCf.xTick        = 1:4;
+% plotCfg.xTickLabel  = {'G2W', 'G2A', 'NG2W', 'NG2A'};
+
+% Option B: label only Go and NoGo
+plotCfg.xTick       = [1.5 3.5];
+plotCfg.xTickLabel  = {'Go', 'NoGo'};
+
+plotCfg.yLab    = 'p(Go)';
+plotCfg.yLim    = [0 1];
+plotCfg.title   = cfg.plotTitle;
+plotCfg.colMat  = [0 113 116; 201 61 33; 0 113 116; 201 61 33] ./ 255; % dark green, red, dark green, red
+
+plotCfg.addPoints  = true;
+plotCfg.addLines   = false;
+
+custom_barplot(plotCfg, aggrData.pGoSubCond(validSubs, :));
+
+% Save:
+if savePNG; saveas(gcf, fullfile(dirs.plot, 'barplot_pGo', sprintf('barplot_pGo_cond_%s.png', cfg.plotHandle))); end
+if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pGo_cond_%s.svg', cfg.plotHandle))); end
+
+% Close:
+pause(pauseDur);
+close gcf
 
 % ----------------------------------------------------------------------- %
-%% 02c) Plot bar plots: p(Stay) ~ response x valence x outcome:
+%% 02b) Plot bar plots: p(Correct)
+
+plotCfg         = [];
+plotCfg.xLab    = 'Condition';
+% plotCf.xTick        = 1:4;
+% plotCfg.xTickLabel  = {'G2W', 'G2A', 'NG2W', 'NG2A'};
+plotCfg.xTick       = [1.5 3.5];
+plotCfg.xTickLabel  = {'Go', 'NoGo'};
+plotCfg.yLab    = 'p(Correct)';
+plotCfg.yLim    = [0 1];
+plotCfg.title   = cfg.plotTitle;
+plotCfg.colMat  = [0 113 116; 201 61 33; 0 113 116; 201 61 33] ./ 255; % dark green, red, dark green, red
+
+plotCfg.addPoints  = true;
+plotCfg.addLines   = false;
+
+custom_barplot(plotCfg, aggrData.pCorrectSubCond(validSubs, :));
+
+% Save:
+if savePNG; saveas(gcf, fullfile(dirs.plot, 'barplot_pCorrect', sprintf('barplot_pCorrect_cond_%s.png', cfg.plotHandle))); end
+if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pCorrect_cond_%s.svg', cfg.plotHandle))); end
+
+% Close:
+pause(pauseDur);
+close gcf
+
+% ----------------------------------------------------------------------- %
+%% 02c) Plot bar plots: p(Stay) ~ past response x valence x past outcome:
 
 outColMat       = [0 113 116; 87 196 173; 240 174 102; 201 61 33] ./ 255; % Var 1: dark green, light green, orange, red
 outColMat       = repmat(outColMat, 2, 1); % duplicate;
@@ -256,8 +256,8 @@ if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_%s.
 pause(pauseDur);
 close gcf
 
-% ----------------------------------------- %
-%% Only valenced outcomes:
+% ----------------------------------------------------------------------- %
+%% 02d) Only valenced outcomes:
 
 plotCfg         = [];
 plotCfg.xLab    = 'Performed action';
@@ -283,8 +283,8 @@ if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_val
 pause(pauseDur);
 close gcf
 
-% ----------------------------------------- %
-%% Only neutral outcomes:
+% ----------------------------------------------------------------------- %
+%% 02e) Only neutral outcomes:
 
 plotCfg         = [];
 plotCfg.xLab    = 'Performed action';
@@ -309,14 +309,14 @@ pause(pauseDur);
 close gcf
 
 % ----------------------------------------------------------------------- %
-%% 02d) Plot bar plots: p(Stay) ~ outcome:
+%% 02f) Plot bar plots: p(Stay) ~ past outcome:
 
 outColMat       = [0 113 116; 87 196 173; 240 174 102; 201 61 33] ./ 255; % Var 1: dark green, light green, orange, red
 
 plotCfg         = [];
 plotCfg.xLab    = 'Performed action';
-plotCfg.xTick       = [1.5 3.5 5.5 7.5];
-plotCfg.xTickLabel  = {'Go', 'NoGo', 'Go', 'NoGo'};
+plotCfg.xTick       = 1:4;
+plotCfg.xTickLabel  = {'Rew', 'NoRew', 'NoPun', 'Pun'};
 plotCfg.yLab    = 'p(Stay)';
 plotCfg.yLim    = [0 1];
 plotCfg.title   = cfg.plotTitle;
@@ -340,7 +340,7 @@ pause(pauseDur);
 close gcf
 
 % ----------------------------------------------------------------------- %
-%% 02e) Plot bar plots: p(Stay) ~ cue valence:
+%% 02g) Plot bar plots: p(Stay) ~ cue valence:
 
 plotCfg         = [];
 plotCfg.xLab    = 'Cue valence';
@@ -365,7 +365,7 @@ pause(pauseDur);
 close gcf
 
 % ----------------------------------------------------------------------- %
-%% 02f) Plot bar plots: p(Stay) ~ response x cue valence:
+%% 02h) Plot bar plots: p(Stay) ~ past response x cue valence:
 
 plotCfg         = [];
 plotCfg.xLab    = 'Performed action';
@@ -389,6 +389,9 @@ if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_val_%s.
 pause(pauseDur);
 close gcf
 
+% ----------------------------------------------------------------------- %
+% ----------------------------------------------------------------------- %
+% ----------------------------------------------------------------------- %
 % ----------------------------------------------------------------------- %
 %% 03) Plot bar plots: RTs
 

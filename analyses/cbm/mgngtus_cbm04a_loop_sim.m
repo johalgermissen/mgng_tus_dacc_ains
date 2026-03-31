@@ -25,12 +25,9 @@ dirs            = mgngtus_cbm_set_dirs();
 % ----------------------------------------------------------------------- %
 %% Select models:
 
-% nMod            = 19;
-% modVec          = 1:nMod;
-
-% modVec          = [1:8 14:18];
-% modVec          = [9 19];
-modVec          = [10 20];
+nMod            = 9;
+modVec          = 1:nMod;
+% modVec          = 1:7;
 
 % ----------------------------------------------------------------------- %
 %% Initialize job settings:

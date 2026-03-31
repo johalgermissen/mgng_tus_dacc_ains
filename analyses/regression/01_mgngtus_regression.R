@@ -10,32 +10,32 @@ rm(list = ls())
 #### Set directories, load packages and custom functions: ####
 
 ## Set codeDir:
-codeDir    <- dirname(rstudioapi::getSourceEditorContext()$path)
-helperDir <- paste0(codeDir, "/helpers/")
+currDir    <- dirname(rstudioapi::getSourceEditorContext()$path)
+helperDir <- file.path(currDir, "helpers")
+source(file.path(helperDir, "set_dirs.R")) # Load packages and options settings
 
 ## Load directories:
-rootDir <- paste0(dirname(codeDir), "/")
-source(paste0(helperDir, "set_dirs.R")) # Load packages and options settings
+rootDir <- dirname(dirname(currDir))
 dirs <- set_dirs(rootDir)
 
 ## Load packages:
-source(paste0(helperDir, "package_manager.R")) # Load packages and options settings
+source(file.path(dirs$helperDir, "package_manager.R")) # Load packages and options settings
 
 # ------------------------------------------------- #
 ## Load custom functions:
 
-source(paste0(codeDir, "/functions/00_mgngtus_functions_regression.R")) # Load functions
+source(file.path(dirs$funcDir, "00_mgngtus_functions_regression.R")) # Load functions
 
 # ============================================================================ #
 #### 01a) Read in behavioral data: ####
 
 ## Sham:
-data1 <- read_behavior(paste0(dirs$rawDataDir, "1_sham"))
+data1 <- read_behavior(file.path(dirs$rawDataDir, "1_sham"))
 table(data1$subjectID, data1$stim_ID)
 data1 <- wrapper_preprocessing(data1)
 data1$sonication_n <- 1
 ## dACC:
-data2 <- read_behavior(paste0(dirs$rawDataDir, "2_dacc"))
+data2 <- read_behavior(file.path(dirs$rawDataDir, "2_dacc"))
 table(data2$subjectID, data2$stim_ID)
 table(data2$stim_ID)
 data2 <- wrapper_preprocessing(data2)
@@ -43,7 +43,7 @@ data2$sonication_n <- 2
 table(data2$cueRep_n)
 table(data2$subject_n, data2$cueRep_n)
 ## aIns:
-data3 <- read_behavior(paste0(dirs$rawDataDir, "3_ai"))
+data3 <- read_behavior(file.path(dirs$rawDataDir, "3_ai"))
 table(data3$subjectID, data3$stim_ID)
 data3 <- wrapper_preprocessing(data3)
 data3$sonication_n <- 3
@@ -118,9 +118,11 @@ data[is.na(data$outcome_n), c("subID", "sonication_f", "trialnr_n", "cue_n", "cu
 round(tapply(data$validity_n, data$subID, mean, na.rm = T), 4) # 0.8125
 
 # ============================================================================ #
-#### 01e) Select data, standardize variables: ####
+#### 01e) Select data, standardize variables, add age, gender, session number: ####
 
 modData <- select_standardize(data)
+modData <- add_demographics(modData) # add age and gender
+modData <- add_session_order(modData) # add session order
 
 # ============================================================================ #
 # ============================================================================ #
@@ -140,6 +142,21 @@ formula <- "response_n ~ reqAction_f * valence_f * sonication_f + (reqAction_f *
 ## 4-way interaction:
 formula <- "response_n ~ reqAction_f * valence_f * sonication_f * firstHalfBlock_f + (reqAction_f * valence_f * sonication_f * firstHalfBlock_f|subject_f)"
 
+## Interactions with age and gender:
+formula <- "response_n ~ reqAction_f * valence_f * age_z + reqAction_f * valence_f * gender_f + (reqAction_f * valence_f|subject_f)"
+formula <- "response_n ~ reqAction_f * valence_f * sonication_f * age_z + reqAction_f * valence_f * sonication_f * gender_f + (reqAction_f * valence_f * sonication_f|subject_f)"
+
+## Interactions with session ID:
+formula <- "response_n ~ reqAction_f * valence_f * session_f + (reqAction_f * valence_f * session_f|subject_f)"
+
+## Interactions with session order:
+formula <- "response_n ~ reqAction_f * valence_f * sonOrder_f + (reqAction_f * valence_f|subject_f)"
+formula <- "response_n ~ reqAction_f * valence_f * sonication_f * sonOrder_f + (reqAction_f * valence_f * sonication_f|subject_f)"
+
+## Effect of cue set:
+formula <- "response_n ~ cue_set_f + (cue_set_f|subject_f)"
+formula <- "response_n ~ session_f * block_f + (session_f * block_f|subject_f)"
+
 # ---------------------------------------------------------------------------- #
 ### Fit or read existing model back in:
 mod <- fit_lmem(formula)
@@ -157,6 +174,21 @@ plot(effect("reqAction_f:valence_f:sonication_f", mod), multiline = T)
 plot(effect("reqAction_f:valence_f:sonication_f", mod), multiline = T, lwd = 4, colors = c("#B2182B", "#2166AC"))
 
 plot(effect("reqAction_f:valence_f:sonication_f:firstHalfBlock_f", mod), multiline = T, lwd = 4, colors = c("#B2182B", "#2166AC"))
+
+plot(effect("reqAction_f:age_z", mod), multiline = T, lwd = 4, colors = c("#B2182B", "#2166AC"))
+plot(effect("reqAction_f:gender_f", mod), multiline = T, lwd = 4, colors = c("#B2182B", "#2166AC"))
+
+plot(effect("session_f", mod), multiline = T, lwd = 4)
+plot(effect("reqAction_f:session_f", mod), multiline = T, lwd = 4)
+
+plot(effect("sonOrder_f", mod), multiline = T, lwd = 4)
+plot(effect("reqAction_f:sonOrder_f", mod), multiline = T, lwd = 4)
+plot(effect("sonication_f:sonOrder_f", mod), multiline = T, lwd = 4)
+plot(effect("reqAction_f:sonication_f:sonOrder_f", mod), multiline = T, lwd = 4)
+
+plot(effect("cue_set_f", mod), multiline = T, lwd = 4)
+plot(effect("session_f:block_f", mod), multiline = T, lwd = 4)
+plot(effect("session_f:block_f", mod, x.var = "session_f"), multiline = T, lwd = 4)
 
 # ============================================================================ #
 #### 02b) Fit logistic regression models to responses manually & separately per cue condition: ####
@@ -271,11 +303,31 @@ emmeans(mod, specs = pairwise ~ reqAction_f:sonication_f | valence_f,
 # ---------------------------------------------------------------------------- #
 ### Select formula:
 
-## Learning bias: stronger outcome effect for Go than NoGo:
+## Learning bias: stronger outcome effect for Go than NoGo (trials are valenced outcomes only):
 formula <- "repeat_n ~ outcome_last_rel_f * response_last_f + (outcome_last_rel_f * response_last_f|subject_f)"
 
 ## Persistence bias: main effect of cue valence:
 formula <- "repeat_n ~ valence_f + (valence_f|subject_f)"
+
+## Interactions with age and gender:
+formula <- "repeat_n ~ outcome_last_rel_f * response_last_f * age_z + outcome_last_rel_f * response_last_f * gender_f + (outcome_last_rel_f * response_last_f|subject_f)"
+formula <- "repeat_n ~ outcome_last_rel_f * response_last_f * sonication_f * age_z + outcome_last_rel_f * response_last_f * sonication_f * gender_f + (outcome_last_rel_f * response_last_f * sonication_f|subject_f)"
+formula <- "repeat_n ~ valence_f * age_z + valence_f * gender_f + (valence_f|subject_f)"
+formula <- "repeat_n ~ valence_f * sonication_f * age_z + valence_f * sonication_f * gender_f + (valence_f * sonication_f|subject_f)"
+
+## Interactions with session ID:
+formula <- "repeat_n ~ outcome_last_rel_f * response_last_f * session_f + (outcome_last_rel_f * response_last_f * session_f|subject_f)"
+formula <- "repeat_n ~ valence_f * session_f + (valence_f * session_f|subject_f)"
+
+## Interactions with session order:
+formula <- "repeat_n ~ sonOrder_f + (1|subject_f)"
+formula <- "repeat_n ~ outcome_last_rel_f * response_last_f * sonOrder_f + (outcome_last_rel_f * response_last_f|subject_f)"
+formula <- "repeat_n ~ valence_f * sonOrder_f + (valence_f|subject_f)"
+formula <- "repeat_n ~ valence_f * sonication_f * sonOrder_f + (valence_f * sonication_f|subject_f)"
+
+## Effect of cue set:
+formula <- "repeat_n ~ cue_set_f + (cue_set_f|subject_f)"
+formula <- "repeat_n ~ session_f * block_f + (session_f * block_f|subject_f)"
 
 # ---------------------------------------------------------------------------- #
 ### Fit model automatically or read past fit back in:
@@ -342,6 +394,25 @@ plot(effect("outcome_last_rel_f:response_last_f", mod, x.var = "response_last_f"
 plot(effect("sonication_f", mod), multiline = T, lwd = 4)
 plot(effect("valence_f", mod), multiline = T, lwd = 4)
 plot(effect("sonication_f:valence_f", mod), multiline = T, lwd = 4)
+
+plot(effect("age_z", mod), multiline = T, lwd = 4)
+plot(effect("gender_f", mod), multiline = T, lwd = 4)
+plot(effect("outcome_last_rel_f:age_z", mod), multiline = T, lwd = 4, colors = c("#B2182B", "#2166AC"))
+plot(effect("response_last_f:age_z", mod), multiline = T, lwd = 4, colors = c("#B2182B", "#2166AC"))
+
+plot(effect("session_f", mod), multiline = T, lwd = 4)
+plot(effect("outcome_last_rel_f:session_f", mod), multiline = T, lwd = 4)
+plot(effect("response_last_f:session_f", mod), multiline = T, lwd = 4)
+
+plot(effect("sonOrder_f", mod), multiline = T, lwd = 4)
+plot(effect("sonication_f:sonOrder_f", mod), multiline = T, lwd = 4)
+plot(effect("outcome_last_rel_f:response_last_f:sonOrder_f", mod), multiline = T, lwd = 4)
+plot(effect("valence_f:sonOrder_f", mod), multiline = T, lwd = 4)
+plot(effect("valence_f:sonication_f:sonOrder_f", mod), multiline = T, lwd = 4)
+
+plot(effect("cue_set_f", mod), multiline = T, lwd = 4)
+plot(effect("session_f:block_f", mod), multiline = T, lwd = 4)
+plot(effect("session_f:block_f", mod, x.var = "session_f"), multiline = T, lwd = 4)
 
 # ---------------------------------------------------------------------------- #
 ### Post-hoc z-tests with emmeans:

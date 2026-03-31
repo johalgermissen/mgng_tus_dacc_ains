@@ -2,10 +2,9 @@ function [out] = mgngtus_cbm_mod09_osap(parameters, subj)
 
 % One-step ahead predictions (learn given empirical responses and outcomes)
 % for:
-% Standard Q-learning model with delta learning rule and with Go bias,
-% Pavlovian response bias, instrumental learning bias, cue-valence based
-% prediction error boost, perseveration parameter.
-% All outcomes receive cue valence-based boost.
+% Standard Q-learning model with delta learning rule and Go bias and
+% Pavlovian response bias and Pavlovian learning bias and single
+% perseveration parameter and neutral outcomes reinterpretation parameter.
 % Constrain kappa and phi and eta to be positive using log1p_exp transform.
 %
 % MGNG TUS STUDY, PLYMOUTH.
@@ -42,8 +41,8 @@ if epsilon < .5 % If default learning rate below 0.5
   biaseps(2)    = 2*epsilon - biaseps(1);                   % negative bias (Punishment after NoGo): take difference transformed epsilon and transformed positive bias, substract from transformed epsilon (= 2*transformed epsilon - transformed positive bias)
 end
 
-% 6) Cue-valence-based prediction error boost:
-eta         = log1p_exp(parameters(6));
+% 6) Neutral outcome reinterpretation parameter:
+eta         = log1p_exp(parameters(6)); % eta (transformed to be positive)
 
 % 7) Choice perseveration parameter:
 phi_bias    = log1p_exp(parameters(7));
@@ -118,9 +117,13 @@ for t=1:nTrial
             eff_epsilon = epsilon;
         end
     
-        % Outcome plus cue valence based prediction-error boost:
-        eff_r       = r + valenced(s)*v*eta;
-
+        % Outcome re-interpretation:
+        if r == 0
+            eff_r = valenced(s)*v*eta;
+        else
+            eff_r = r;
+        end
+        
         % Update:
         delta       = (rho*eff_r) - q(s, c); % prediction error
         q(s, c)     = q(s, c) + (eff_epsilon*delta);

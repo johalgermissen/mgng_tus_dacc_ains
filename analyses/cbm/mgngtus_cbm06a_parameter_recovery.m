@@ -12,15 +12,15 @@
 % Modelled after:
 % https://github.com/johalgermissen/Algermissen2024NatComms/blob/main/Analyses/CBM_Scripts/EEGfMRIPav_cbm_parameter_recovery.m
 % https://github.com/johalgermissen/Algermissen2024LM/tree/main/analyses/stan_scripts/parameter_recovery
-%
+% 
 % MGNG TUS STUDY, PLYMOUTH.
 % Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 % Should work in MATLAB 2023b.
 
+% clear all; close all; clc
+
 % ----------------------------------------------------------------------- %
 %% 00a) Set directories:
-
-clear all; close all; clc
 
 % Change directory to location of this file:
 cd(fileparts(matlab.desktop.editor.getActiveFilename));
@@ -37,23 +37,20 @@ nSon            = length(sonVec);
 %% 00c) Flexible settings:
 
 % Model:
-modID       = 20; % final reparameterised model: M20
+modID       = 7; % winning model: M7
 
 % Fitting type (parameters to load):
 parType     = 'lap';
 
 % Number of simulations:
 nSim        = 1000;
-% nSim        = 100;
 
 % Fit also HBI or not:
 fitType     = 'lap';
 % fitType     = 'hbi';
 
 % Plotting settings:
-% savePNG   = true;
 savePNG   = false;
-% saveSVG   = true;
 saveSVG   = false;
 
 % ----------------------------------------------------------------------- %
@@ -197,7 +194,6 @@ modLapFile          = sprintf('param_fitted_M%02d_nSim%04d_lap.mat', ...
 fprintf('*** Model output file name will be %s ***\n', modLapFile);
 modLapFullFile      = fullfile(dirs.paramRecov, modLapFile);
 modLapFullFileCell  = {modLapFullFile};
-% cd(dirs.paramRecov);
 
 % -------------------------------- %
 % Fit model if not existent:
@@ -256,10 +252,6 @@ end % end isHBI
 
 % ----------------------------------------------------------------------- %
 %% 05) Load fitted model output, extract fitted parameters:
-
-% Fit also HBI or not:
-% fitType     = 'lap';
-% fitType     = 'hbi';
 
 % Load model output:
 if strcmp(fitType, 'lap')

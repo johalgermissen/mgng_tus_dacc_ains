@@ -5,16 +5,13 @@
 % save as .csv files.
 % 
 % MGNG TUS STUDY, PLYMOUTH.
-% J. Algermissen, 2024.
-% Should work in Matlab 2018b.
+% Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
+% Should work in MATLAB 2023b.
 
-% we are here:
-% cd dirs.root/Analyses/CBM_Scripts/
+% clear all; close all; clc
 
 % ----------------------------------------------------------------------- %
 %% 00) Initialize cfg:
-
-clear all; close all; clc
 
 % Change directory to location of this file:
 cd(fileparts(matlab.desktop.editor.getActiveFilename));

@@ -91,13 +91,6 @@ for iSub = 1:nSub
         fprintf('*** Model %02d: loglik = %f\n', iMod, F1);
     end
 
-    % b) Extreme parameter values:
-    % for iMod = modVec % 1:nMod
-    %     parameters = [-10 10 -10 10 10 10 10];
-    %     F1 = eval(sprintf('EEGfMRIPav_cbm_mod%02d(parameters, subj)', iMod));
-    %     fprintf('*** Model %02d: loglik = %f\n', iMod,F1);
-    % end
-
 end
 
 % ----------------------------------------------------------------------- %

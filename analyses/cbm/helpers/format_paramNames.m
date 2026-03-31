@@ -54,7 +54,6 @@ for iParam = 1:nParam % iParam = 6;
         addDollar   = 1;  % set to true
         tmp         = split(paramNamesPlot{iParam}, '_');
         paramNamesPlot{iParam} = [tmp{1} '_{' tmp{2} '}']; % add braces
-        % paramNamesPlot{iParam} = ['$' tmp{1} '_{' tmp{2} '}$'];
     end
     % c) Add dollar signs:
     if addDollar

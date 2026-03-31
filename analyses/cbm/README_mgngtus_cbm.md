@@ -18,13 +18,13 @@ Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 - *mgngtus_cbm03b_eval_param.m*: Load fitted parameter values; plot as bar plots with parameters next to each other (separately per sonication condition).
 - *mgngtus_cbm03c_eval_param_sonication.m*: Load fitted parameter values; plot as bar plots with sonication conditions next to each other (separately per parameter type).
 - *mgngtus_cbm04a_loop_sim.m*: Simulate behaviour for given model given fitted parameter values.
-- *mgngtus_cbm04b_plot_behaviour.m*: Load in empirical or simulated data; plot behaviour (p(Go), p(Stay), RTs) as bar plots and line plots per task condition (required action, valence; response, outcome).
+- *mgngtus_cbm04b_plot_behaviour.m*: Load in empirical or simulated data; plot behaviour (p(Go), p(Stay), RTs) as bar plots and line plots per task condition (required action, valence; past response, past outcome).
 - *mgngtus_cbm04c_plot_pStay_out_sonication.m*: Load in empirical or simulated data; plot behaviour (p(Stay)) as bar plots with sonication conditions next to each other; perform paired t-tests and RM-ANOVAs.
 - *mgngtus_cbm05_save_param.m*: Save parameter values per model as .csv files. 
 - *mgngtus_cbm06a_parameter_recovery.m*: Perform and evaluate parameter recovery for selected model.
 - *mgngtus_cbm06b_model_recovery_fit.m*: Perform model recovery for selected models.
 - *mgngtus_cbm06c_model_recovery_eval.m*: Evaluate model recovery for selected models.
-- *04_mgngtus_params.R*: Load in .csv files with parameter values previously saved from MATLAB; plot, perform t-tests and repeated-measures ANOVAs.
+- *04_mgngtus_params.R*: Load in .csv files with parameter values previously saved from MATLAB; plot in R, perform t-tests and repeated-measures ANOVAs, correlate parameter changes under TUS with simulated peak pressure/intensity.
 
 # helpers
 - *boundedline.m*: Make line plot with error shade (function by (C) Kelly Kearney).

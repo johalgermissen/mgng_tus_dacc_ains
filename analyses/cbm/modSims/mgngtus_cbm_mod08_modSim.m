@@ -1,9 +1,10 @@
 function [out] = mgngtus_cbm_mod08_modSim(parameters, subj)
 
 % Model simulations (sample new responses and outcomes) for:
-% Standard Q-learning model with delta learning rule and Go bias and
-% Pavlovian response bias and Pavlovian learning bias and single
-% perseveration parameter and neutral outcomes reinterpretation parameter.
+% Standard Q-learning model with delta learning rule and with Go bias,
+% Pavlovian response bias, instrumental learning bias, cue-valence based
+% prediction error boost, perseveration parameter.
+% All outcomes receive cue valence-based boost.
 % Constrain kappa and phi and eta to be positive using log1p_exp
 % transform.
 %
@@ -41,7 +42,7 @@ if epsilon < .5 % If default learning rate below 0.5
   biaseps(2)    = 2*epsilon - biaseps(1);                   % negative bias (Punishment after NoGo): take difference transformed epsilon and transformed positive bias, substract from transformed epsilon (= 2*transformed epsilon - transformed positive bias)
 end
 
-% 6) Neutral outcome reinterpretation parameter:
+% 6) Cue-valence-based prediction error boost:
 eta         = log1p_exp(parameters(6));
 
 % 7) Choice perseveration parameter:
@@ -141,12 +142,8 @@ for t = 1:nTrial
             eff_epsilon = epsilon;
         end
     
-        % Outcome reinterpretation:
-        if r == 0
-            eff_r       = valenced(s)*v*eta;
-        else
-            eff_r       = r;
-        end
+        % Outcome plus cue valence based prediction-error boost:
+        eff_r = r + valenced(s)*v*eta;
         
         % Update:
         delta    = (rho*eff_r) - q(s, c); % prediction error

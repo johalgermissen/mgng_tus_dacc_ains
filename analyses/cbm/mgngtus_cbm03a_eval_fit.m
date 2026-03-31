@@ -7,13 +7,12 @@
 %
 % OUTPUTS:
 % no outputs, just plots.
-%
+% 
 % MGNG TUS STUDY, PLYMOUTH.
-% J. Algermissen, 2024.
-% Should work in Matlab 2018b.
+% Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
+% Should work in MATLAB 2023b.
 
-% we are here:
-% cd C:/Users/johan/OneDrive/Documents/AACollaborations/MGNGUltrasoundNomiki/analyses/cbm
+% clear all; close all; clc
 
 % ----------------------------------------------------------------------- %
 %% 00a) Initialize directories:
@@ -65,10 +64,8 @@ cfg.dataType    = 'sham';
 
 % Specify number of models to load:
 
-% nMod        = 9;
-modRange   = 1:7;
-% modRange    = 1:nMod;
-% modRange   = 7:9;
+modRange   = 1:7; % 7 main models
+% modRange   = 7:9; % winning model against two control models
 
 nMod        = max(modRange); % must be maximum model ID
 
@@ -100,7 +97,6 @@ addLines    = false; % connect individual data points from same subject or not
 addLines    = true; % connect individual data points from same subject or not
 
 clear suffix
-% suffix      = '_long';
 
 % Select models in correct order (name can differ from model IDs):
 modVec      = modRange;
@@ -266,8 +262,6 @@ fprintf('Protected exceedance probability: %s\n', ...
 %% 02b) Plot model frequency and exceedance probability:
 
 % Select model names and their order:
-% modNames    = modVec; % actual names in given order
-% modNames    = sort(modVec); % actual names sorted
 nModPlot    = length(modVec);
 modNames    = 1:nModPlot; fprintf('Rename model names to 1-n\n'); % just 1-nMod
 

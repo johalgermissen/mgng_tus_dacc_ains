@@ -9,10 +9,10 @@
 % Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 % Should work in MATLAB 2023b.
 
+% clear all; close all; clc
+
 % ----------------------------------------------------------------------- %
 %% 00a) Initialize directories:
-
-% clear all; close all; clc
 
 % Change directory to location of this file:
 cd(fileparts(matlab.desktop.editor.getActiveFilename));
@@ -39,7 +39,7 @@ cfg.dataType    = 'sham';
 cfg.parType     = 'hbi'; % use only for hbi
 
 % Model to be loaded:
-cfg.modID       = 8;
+cfg.modID       = 7; % winning model is M7
 
 pauseDur        = 1;
 
@@ -112,8 +112,6 @@ LWD             = 5; % line width
 
 % Select y-axis limit:
 for yMax = [1 10 max(subParamMat(:))]
-    % yMax = max(subParamMat(:)); % from 0 to any maximum
-    % yMax = 1; % from 0 to 1
 
     fprintf('*** Plot parameters for M%02d (%s) with yMax = %.02f ... ***\n', cfg.modID, cfg.dataType, yMax);
     
@@ -124,11 +122,8 @@ for yMax = [1 10 max(subParamMat(:))]
     % Make figure:
     close all
     figure('color', 'white', 'Position',[100 100 800 800]); hold on
-    % figure('color', 'white', 'Position', [100 100 1200 700]); hold on
-    % figure('color', 'white', 'units', 'normalized', 'outerposition', [0 0 1 1]); hold on
     
     % Bars:
-    % barScatter(ScatterMatrix, [], [], true, true, colMat, posMat);
     bar(xLoc, mean(subParamMat, 1));
     
     % Whiskers:
@@ -143,13 +138,10 @@ for yMax = [1 10 max(subParamMat(:))]
         s = scatter(repmat(xLoc(iParam), 1, nSub), paramVec, [],...
             'k', 'jitter', 'on', 'jitterAmount', 0.10); hold on % was 0.05
         set(s, 'MarkerEdgeColor', [0.4 0.4 0.4], 'linewidth', 2); % was 1 
-    %     plot(repelem(xLoc(iParam), nSub), subParamMat(:, iParam), 'k*')
     end
     
     % Add plot features:
     if min(subParamMat(:)) < 0; yMin = floor(min(subParamMat(:))); else; yMin = 0; end
-    % yMax = max(subParamMat(:)); % from 0 to any maximum
-    % yMax = 1; % from 0 to 1
     ylim([yMin yMax]);
     set(gca,'xtick', 1:nParam, 'xticklabel', paramNamesPlot,...
         'Linewidth', LWD, 'FontSize', FTS, 'TickLabelInterpreter', 'latex')

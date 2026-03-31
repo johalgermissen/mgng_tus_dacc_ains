@@ -8,10 +8,10 @@
 % Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 % Should work in MATLAB 2023b.
 
+% clear all; close all; clc
+
 % ----------------------------------------------------------------------- %
 %% 00a) Initialize directories:
-
-% clear all; close all; clc
 
 % Change directory to location of this file:
 cd(fileparts(matlab.desktop.editor.getActiveFilename));
@@ -29,7 +29,7 @@ cfg             = mgngtus_cbm_set_config();
 %% 00c) Settings:
 
 % Select model to plot:
-cfg.modID       = 7; % Phi Int and Dif
+cfg.modID       = 7; % winning model is M7
 
 % Fitting method:
 % cfg.parType     = 'lap'; % use only for LAP
@@ -91,9 +91,7 @@ plotCfg.colMat      = [229 229 229; 211 67 110; 254 186 128] /255; % grey, red, 
 plotCfg.modID       = cfg.modID;
 
 plotCfg.addPoints   = true;
-
 plotCfg.addLines    = false;
-% plotCfg.addLines    = true;
 
 % Loop over parameters:
 for iParam = 1:nParam % iParam = 1;
@@ -113,21 +111,22 @@ for iParam = 1:nParam % iParam = 1;
     % Save:
     if plotCfg.addLines; figName = [figName '_lines']; end
     saveas(gcf, fullfile(dirs.param, [figName '.png']));
-    saveas(gcf, fullfile(dirs.elsa, [figName '.svg']));
+    saveas(gcf, fullfile(dirs.plot, [figName '.svg']));
     pause(pauseDur); close gcf
     
     % fprintf('Wait for button press to start next plot ...\n');
     % waitforbuttonpress; close gcf
+
 end
 
 % ----------------------------------------------------------------------- %
-%% 03) T-test on difference:
+%% 03) T-test on sonication condition difference in selected parameter:
 
 % a) Select parameter:
-iParam  = 6; 
+iParam  = 7; 
 
 % b) Select conditions: see sonVec
-% iCond1  = 2; % dACC
+iCond1  = 2; % dACC
 % iCond1  = 3; % aIns
 
 iCond2  = 1; % sham
@@ -140,7 +139,7 @@ fprintf('t(%d) = %.03f, p = %.03f, d = %.03f\n', ...
     STATS.df, STATS.tstat, P, mean(diffVec)/std(diffVec));
 
 % ----------------------------------------------------------------------- %
-%% 04) Loop over parameters, RM-ANOVA (ranova from Statistics & Machine Learning Toolbox):
+%% 04) RM-ANOVA on selected parameter (ranova from Statistics & Machine Learning Toolbox):
 
 % Select parameter, compute RM-ANOVA across all 3 conditions:
 iParam          = 7;

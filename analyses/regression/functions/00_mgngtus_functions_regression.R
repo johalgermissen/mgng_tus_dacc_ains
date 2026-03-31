@@ -33,7 +33,6 @@ read_behavior <- function(inputFileDir){
   
   ## Inspect:
   print(head(data, n = 10))
-  # print(table(data$Subject))
   cat("Finished! :-)\n")
   
   return(data)
@@ -194,36 +193,20 @@ wrapper_preprocessing <- function(data){
   } 
   
   ## To factor:
-  # data[subIdx, c("RTcleaned_n", "RTcleaned_fast_sub_n")]
   data$RTcleaned_fast_f <- factor(data$RTcleaned_fast_n, levels = c(1, 0), labels = c("fast", "slow"))
-  # table(data$RTcleaned_fast_f)
-  # table(data$RTcleaned_fast_f, data$subject_f)
-  
   data$RTcleaned_valence_f <- factor(data$RTcleaned_valence_n, levels = c(1:4), labels = c("F2W", "F2A", "S2W", "S2A"))
-  # table(data$RTcleaned_valence_f)
-  # table(data$RTcleaned_valence_f, data$subject_f)
-  # data[1:50, c("RTcleaned_fast_f", "valence_f", "RTcleaned_valence_f")]
-  
+
   ## Based on RTcleaned_fast_n, without per-subject correction for valence:
   data$RTcleaned_valence_uncor_n <- (1 - data$RTcleaned_fast_n) * 2 + (1 - data$valence_n) + 1
   data$RTcleaned_valence_uncor_f <- factor(data$RTcleaned_valence_uncor_n, levels = c(1:4), labels = c("F2W", "F2A", "S2W", "S2A"))
-  # table(data$RTcleaned_valence_uncor_f)
-  # table(data$RTcleaned_valence_uncor_f, data$subject_f)
-  # data[1:50, c("RTcleaned_fast_f", "valence_f", "RTcleaned_valence_uncor_f")]
-  
+
   ## To factor:
   data$RTcleaned_ACC_f <- factor(data$RTcleaned_ACC_n, levels = c(1:4), labels = c("Fcor", "Finc", "Scor", "Sinc"))
-  # table(data$RTcleaned_ACC_f)
-  # table(data$RTcleaned_ACC_f, data$subject_f)
-  # data[1:50, c("RTcleaned_fast_f", "ACC_f", "RTcleaned_ACC_f")]
-  
+
   ## Based on RTcleaned_fast_n, without per-subject correction for accuracy:
   data$RTcleaned_ACC_uncor_n <- (1 - data$RTcleaned_fast_n) * 2 + (1 - data$ACC_n) + 1
   data$RTcleaned_ACC_uncor_f <- factor(data$RTcleaned_ACC_uncor_n, levels = c(1:4), labels = c("Fcor", "Finc", "Scor", "Sinc"))
-  # table(data$RTcleaned_ACC_uncor_f)
-  # table(data$RTcleaned_ACC_uncor_f, data$subject_f)
-  # data[1:50, c("RTcleaned_fast_f", "ACC_f", "RTcleaned_ACC_uncor_f")]
-  
+
   # -------------------------------------------------------------------------- #
   ### Outcomes:
   
@@ -236,8 +219,7 @@ wrapper_preprocessing <- function(data){
   ## Combine with response:
   data$outcome_response_n <- (2 - data$outcome_n) * 2 - data$response_n
   data$outcome_response_f <- factor(data$outcome_response_n, levels = 1:6, labels = c("rewGo", "rewNoGo", "neuGo", "neuNoGo", "punGo", "punNoGo"))
-  # data[1:30, c("outcome_f", "response_f", "outcome_response_f")]
-  
+
   ## Relative outcomes (positive/ negative):
   data$outcome_rel_n <- ifelse(data$outcome_n == 1 | data$outcome_n == 0 & data$valence_n == 0, 1,
                                ifelse(data$outcome_n == -1 | data$outcome_n == 0 & data$valence_n == 1, 0, 
@@ -253,8 +235,7 @@ wrapper_preprocessing <- function(data){
                                                     NA))))
   data$outcome_all_f <- factor(data$outcome_all_n, levels = 1:4, labels = c("rewarded", "not rewarded", "not punished", "punished"))
   data$outcome_all_short_f <- factor(data$outcome_all_n, levels = 1:4, labels = c("rew", "¬rew", "¬pun", "pun"))
-  # data[1:40, c("valence_f", "outcome_f", "outcome_all_f")]
-  
+
   # -------------------------------------------------------------------------- #
   ## Feedback validity:
   
@@ -268,8 +249,7 @@ wrapper_preprocessing <- function(data){
                                    (data$valence_n == 0 & data$ACC_n == 0 & data$outcome_n == 0), 0,
                                    NA))
   data$validity_f <- factor(data$validity_n, levels = c(1, 0), labels = c("valid", "invalid"))
-  # data[1:40, c("valence_n", "ACC_n", "validity_n", "outcome_n")]
-  
+
   # -------------------------------------------------------------------------- #
   ## Trial-number within block, cue repetition:
   
@@ -277,12 +257,7 @@ wrapper_preprocessing <- function(data){
   data$cueRep_f <- factor(data$cueRep_n)
   table(data$cue_n)
   table(data$cueRep_n)
-  # table(data$subject_n, data$cueRep_n)
-  # subData <- subset(data, subject_n == 93)
-  # subData <- subset(data, subject_n == 154)
-  # table(subData$cue_n)
-  # table(subData$stim_ID)
-  
+
   ## Add factors:
   data$trialnr_block_f <- factor(data$trialnr_block_n)
   
@@ -340,7 +315,6 @@ wrapper_preprocessing <- function(data){
   
   data <- add_lag(data, "response_n")
   data$response_lag1_f <- factor(data$response_lag1_n, levels = c(1, 0), labels = c("Go", "NoGo"))
-  # data[, c("trialnr_block_n", "response_n", "response_lag1_n")]
 
   # -------------------------------------------------------------------------- #
   ## Repeat/switch:
@@ -355,17 +329,14 @@ wrapper_preprocessing <- function(data){
   ## Per response:
   data$repeat_response_n <- (1 - data$repeat_n) * 2 + (1 - data$response_n) + 1
   data$repeat_response_f <- factor(data$repeat_response_n, levels = c(1:4), labels = c("repGo", "repNoGo", "swiGo", "swiNoGo"))
-  # data[1:20, c("repeat_f", "response_f", "repeat_response_f")]
-  
+
   ## Per valence:
   data$repeat_valence_n <- (1 - data$repeat_n) * 2 + (1 - data$valence_n) + 1
   data$repeat_valence_f <- factor(data$repeat_valence_n, levels = c(1:4), labels = c("rep2W", "rep2A", "swi2W", "swi2A"))
-  # data[1:20, c("repeat_f", "valence_f", "repeat_valence_f")]
-  
+
   data$repeat_valence_Go_n <- ifelse(data$response_f == "Go", data$repeat_valence_n, NA)
   data$repeat_valence_Go_f <- factor(data$repeat_valence_Go_n, levels = c(1:4), labels = c("rep2W", "rep2A", "swi2W", "swi2A"))
-  # data[1:20, c("repeat_f", "valence_f", "response_f", "repeat_valence_Go_f")]
-  
+
   # -------------------------------------------------------------------------- #
   ## Outcome last trial:
   
@@ -374,8 +345,7 @@ wrapper_preprocessing <- function(data){
   data <- add_lag(data, "outcome_n")
   data$outcome_lag1_f <- factor(data$outcome_lag1_n, levels = c(1, 0), labels = c("reward", "punishment"))
   data$outcome_lag1_short_f <- factor(data$outcome_lag1_n, levels = c(1, 0), labels = c("rew", "pun"))
-  # data[, c("trialnr_block_n", "outcome_n", "outcome_lag1_n")]
-  
+
   # -------------------------------------------------------------------------- #
   ## Remove old variables:
   data <- data[, (nVar + 1):ncol(data)]
@@ -386,7 +356,124 @@ wrapper_preprocessing <- function(data){
 }
 
 # ============================================================================ #
-#### 04) Retrieve default values for plots: #####
+#### 03) Add demographics: ####
+
+add_demographics <- function(data){
+  #' Load and add demographics to data.
+  #' @param data    data frame with trial-level data.
+  #' @return data   same data frame with additional variables age_n and gender_f.
+  
+  cat("Add demographics (age, gender) to data ...\n")
+  
+  ## Load:
+  demoData <- as.data.frame(read_xlsx(file.path(dirs$demographicsDir, "demographics.xlsx"))) # load
+  
+  ## Recode variables:
+  demoData$subID <- demoData$ID
+  demoData$gender_f <- demoData$gender
+  demoData$age_n <- demoData$age
+  
+  ## Select variables:
+  demoData <- demoData[, c("subID", "age_n", "gender_f")]
+  
+  ## Select subjects:
+  stopifnot(all(sort(unique(data$subID)) %in% sort(unique(demoData$subID))))
+  demoData <- demoData[which(demoData$subID %in% unique(data$subID)), ]
+  
+  ## Inspect:
+  # table(demoData$gender_f)
+  #  F  M 
+  # 15 14 
+  # t(stat.desc(demoData$age_n))
+  #      nbr.val nbr.null nbr.na min max range sum median     mean  SE.mean CI.mean.0.95      var  std.dev  coef.var
+  # [1,]      29        0      0  21  59    38 889     26 30.65517 2.176496     4.458349 137.3768 11.72079 0.3823429
+  
+  ## Merge with data:
+  if(!("age_n" %in% names(data))){
+    cat("Add age_n and gender_f\n")
+    data <- merge(data, demoData, by = "subID")
+  } else {
+    warning("age_n already variable in modData, do not add again")
+  }
+  return(data)
+  
+}
+
+# ============================================================================ #
+#### 04) Add session order: ####
+
+add_session_order <- function(data){
+  #' Load and add session order to data.
+  #' @param data    data frame with trial-level data.
+  #' @return data   same data frame with additional variables sonOrder_f, session_n, and session_f.
+  
+  cat("Add session order to data ...\n")
+  
+  ## Load:
+  sessionData_long <- as.data.frame(read_xlsx(file.path(dirs$mappingDir, "session_mapping.xlsx"))) # load
+  
+  ## Recode variables:
+  sessionData_long$subID <- sessionData_long$ID
+  sessionData_long$session_n <- sessionData_long$Session
+  sessionData_long$sonication_f <- factor(sessionData_long$Condition)
+  
+  ## Select variables:
+  sessionData_long <- sessionData_long[, c("subID", "session_n", "sonication_f")]
+  
+  ## Reshape sessions into wide format:
+  sessionData_wide <- reshape(sessionData_long, direction = "wide",
+                              idvar = "subID", v.names = "sonication_f", timevar = "session_n")
+  sessionData_wide$sonOrder_f <- factor(paste0(sessionData_wide$sonication_f.1, "_", sessionData_wide$sonication_f.2, "_", sessionData_wide$sonication_f.3))
+  
+  ## Select variables:
+  sessionData_wide <- sessionData_wide[, c("subID", "sonOrder_f")]
+  
+  ## Select subjects:
+  stopifnot(all(sort(unique(data$subID)) %in% sort(unique(sessionData_wide$subID))))
+  sessionData_wide <- droplevels(sessionData_wide[which(sessionData_wide$subID %in% unique(data$subID)), ])
+  
+  ## Inspect:
+  table(sessionData_wide$sonOrder_f)
+  
+  ## Merge with data:
+  if(!("sonOrder_f" %in% names(data))){
+    cat("Add sonOrder_f\n")
+    data <- droplevels(merge(data, sessionData_wide, by = "subID"))
+  } else {
+    warning("sonOrder_f already variable in data, do not add again")
+  }
+  
+  # -------------------------------------------------------------------------- #
+  ## Add session ID:
+  cat("Add session_n and session_f \n")
+  data$session_n <- ifelse(data$sonOrder_f == "dACC_Insula_Sham" & data$sonication_f == "dACC", 1,
+                           ifelse(data$sonOrder_f == "dACC_Insula_Sham" & data$sonication_f == "aIns", 2,
+                                  ifelse(data$sonOrder_f == "dACC_Insula_Sham" & data$sonication_f == "sham", 3,
+                                         ifelse(data$sonOrder_f == "Insula_Sham_dACC" & data$sonication_f == "aIns", 1,
+                                                ifelse(data$sonOrder_f == "Insula_Sham_dACC" & data$sonication_f == "sham", 2,
+                                                       ifelse(data$sonOrder_f == "Insula_Sham_dACC" & data$sonication_f == "dACC", 3,
+                                                              ifelse(data$sonOrder_f == "Sham_dACC_Insula" & data$sonication_f == "sham", 1,
+                                                                     ifelse(data$sonOrder_f == "Sham_dACC_Insula" & data$sonication_f == "dACC", 2,
+                                                                            ifelse(data$sonOrder_f == "Sham_dACC_Insula" & data$sonication_f == "aIns", 3,
+                                                                                   NA)))))))))
+  data$session_f <- factor(data$session_n)
+  
+  # -------------------------------------------------------------------------- #
+  ### Add cue set:
+  
+  if ("cue_n" %in% names(data)){
+    cat("Add cue_set_n and cue_set_f \n")
+    ## 4 blocks per session: Block 1 with cues 1-4, block 2 with cues 5-8, block 3 with cues 9-12, block 4 with cues 13-16
+    ## 3 sessions (1-4, 5-8, 9-12), within those sessions indicate block number
+    data$cue_set_n <- (data$session_n - 1) * 4 + ((data$cue_n - 1) %/% 4) + 1
+    data$cue_set_f <- factor(data$cue_set_n)
+    
+  }
+  return(data)
+}
+
+# ============================================================================ #
+#### 05) Retrieve default values for plots: #####
 
 retrieve_plot_defaults <- function(input){
   #' Retrieve default for given plotting parameter.
@@ -410,7 +497,7 @@ retrieve_plot_defaults <- function(input){
 }
 
 # ============================================================================ #
-#### 05) Automatically convert variable names to pretty names for plots: #####
+#### 06) Automatically convert variable names to pretty names for plots: #####
 
 substitute_label <- function(labels){
   #' Substitute certain manually defined factor names for prettier names.
@@ -544,7 +631,7 @@ substitute_label <- function(labels){
 }
 
 # ============================================================================ #
-#### 06) Retrieve colour given independent variable: #####
+#### 07) Retrieve colour given independent variable: #####
 
 retrieve_colour <- function(input){
   #' Retrieve colour scheme given variable name (pattern) as input.
@@ -636,8 +723,8 @@ retrieve_colour <- function(input){
     output <- c("#009933", "grey", "#CC0000")
 
   } else if (grepl("sonication", input, fixed = TRUE)){
-    output <- c("grey90", "#D3436EFF", "#FEBA80FF") # sham, dACC, aIns
-
+    output <- c("#e2e2e2", "#8a8c9d", "#e3d29b") # sham, dACC, aIns 
+    
   } else {
     if (exists("plotData")){ # check if plotData exists
       
@@ -687,7 +774,7 @@ retrieve_colour <- function(input){
 }
 
 # ============================================================================ #
-#### 07) Add cue repetition variable to behavioral data: ####
+#### 08) Add cue repetition variable to behavioral data: ####
 
 add_cueRep <- function(data){
   #' Add new variables representing 
@@ -778,7 +865,7 @@ add_cueRep <- function(data){
 # data[data$subject_n == 1 & data$cue_n == 1, c("subject_n", "trialnr_n", "cue_n", "cueRep_n", "outcome_n", "outcome_last_n")]
 
 # ============================================================================ #
-#### 08) Add lag 1 version of selected variable: ####
+#### 09) Add lag 1 version of selected variable: ####
 
 add_lag <- function(data, inputVar, nLag = 1){
   #' Overwrite reward lag 1 variable based on reward variable, delete after 
@@ -830,7 +917,7 @@ add_lag <- function(data, inputVar, nLag = 1){
 }
 
 # ============================================================================ #
-#### 09) Select data, standardize variables: ####
+#### 10) Select data, standardize variables: ####
 
 select_standardize <- function(data, sub2excl = c()){
   #' Exclude subjects, standardize numerical variables of remaining data.
@@ -871,7 +958,7 @@ select_standardize <- function(data, sub2excl = c()){
 }
 
 # ============================================================================ #
-#### 10) Recode formula in Wilkinson notation to handle that can be used for saving models as files: ####
+#### 11) Recode formula in Wilkinson notation to handle that can be used for saving models as files: ####
 
 formula2handle <- function(formula){
   #' Create name based on formula with underscores instead of spaces without random-effects part to be used in plot names.
@@ -921,7 +1008,7 @@ formula2handle <- function(formula){
 }
 
 # ============================================================================ #
-#### 11) Retrieve or fit & save linear mixed-effects model based on formula: ####
+#### 12) Retrieve or fit & save linear mixed-effects model based on formula: ####
 
 fit_lmem <- function(formula, useLRT = FALSE){
   #' Retrieve previously fitted model or fit model anew and save it.
@@ -966,10 +1053,10 @@ fit_lmem <- function(formula, useLRT = FALSE){
   # ------------------------------------------------------------------------ #
   ## Check if already exists; if yes, retrieve; if not, fit anew:
   
-  if (file.exists(paste0(dirs$modelDir, modName))){
+  if (file.exists(file.path(dirs$modelDir, modName))){
     
     cat(paste0(">>> Found ", modName, ", load \n"))
-    mod <- readRDS(paste0(dirs$modelDir, modName))
+    mod <- readRDS(file.path(dirs$modelDir, modName))
     if (useLRT){
       print(anova(mod))
     } else {
@@ -1022,7 +1109,7 @@ fit_lmem <- function(formula, useLRT = FALSE){
     ### Save model:
     
     cat(paste0(">>> Save ", modName, "\n"))
-    saveRDS(mod, paste0(dirs$modelDir, modName))
+    saveRDS(mod, file.path(dirs$modelDir, modName))
     cat(">>> Saved :-)\n")
     
   }
@@ -1032,7 +1119,7 @@ fit_lmem <- function(formula, useLRT = FALSE){
 }
 
 # ============================================================================ #
-#### 12) Determine y-axis limits: ####
+#### 13) Determine y-axis limits: ####
 
 determine_ylim_data_y <- function(data){
   #' Determine optimal y-axis limits based on some input heuristics
@@ -1085,7 +1172,7 @@ determine_ylim_data_y <- function(data){
 } 
 
 # ============================================================================ #
-#### 13) Find plausible axis limits: #####
+#### 14) Find plausible axis limits: #####
 
 find_round_lim <- function(input){
   #' Round input xMin and xMax such that they become plausible axis limits 
@@ -1110,7 +1197,7 @@ find_round_lim <- function(input){
 }
 
 # ============================================================================ #
-#### 14) Find plausible tick step size given axis limits: #####
+#### 15) Find plausible tick step size given axis limits: #####
 
 find_step <- function(input, nTickTarget = 5){
   #' Plot learning curve per cue per subject using basic plot() function 
@@ -1147,7 +1234,7 @@ find_step <- function(input, nTickTarget = 5){
 }
 
 # ============================================================================ #
-#### 15) Plot group-level and subject-level coefficients as dots in horizontal dot-plot: #####
+#### 16) Plot group-level and subject-level coefficients as dots in horizontal dot-plot: #####
 
 custom_coefplot <- function(mod, plotSub = TRUE, plotText = FALSE, dropIntercept = FALSE, revOrder = FALSE,
                             xLab = "Regression weight", yLab = "Predictor", main = NULL,
@@ -1485,7 +1572,7 @@ custom_coefplot <- function(mod, plotSub = TRUE, plotText = FALSE, dropIntercept
 }
 
 # ============================================================================ #
-#### 16) Plot intercorrelations of regressors in design matrix: #####
+#### 17) Plot intercorrelations of regressors in design matrix: #####
 
 corrplot_regressors <- function(mod, perSub = F, varNames = NULL, savePNG = TRUE){
   #' Plot intercorrelations between regressors in design matrix using coefplot.
@@ -1586,8 +1673,8 @@ corrplot_regressors <- function(mod, perSub = F, varNames = NULL, savePNG = TRUE
   ## Make corrplot:
   
   # mar = c(0,0, 1,0)  
-  # if(savePNG) {png(paste0(dirs$plot, "ic_reg/", plotName), width = 480, height = 480)}
-  if(savePNG) {png(paste0(dirs$plot, plotName), width = 480, height = 480)}
+  # if(savePNG) {png(file.path(dirs$plot, "ic_reg", plotName), width = 480, height = 480)}
+  if(savePNG) {png(file.path(dirs$plot, plotName), width = 480, height = 480)}
   
   # https://stackoverflow.com/questions/40352503/change-text-color-in-corrplot-mixed
   
@@ -1615,7 +1702,7 @@ corrplot_regressors <- function(mod, perSub = F, varNames = NULL, savePNG = TRUE
 }
 
 # ============================================================================ #
-#### 17) Plot intercorrelations of coefficients from model: #####
+#### 18) Plot intercorrelations of coefficients from model: #####
 
 corrplot_coefficients <- function(input, varNames = NULL, savePNG = TRUE){ 
   #' Plot intercorrelations between regressors in design matrix using coefplot.
@@ -1742,8 +1829,8 @@ corrplot_coefficients <- function(input, varNames = NULL, savePNG = TRUE){
   # https://stackoverflow.com/questions/14671172/how-to-convert-r-formula-to-text
   
   plotName <- paste0("corr_coef_", modClass, "_", formula2handle(formulaStr), ".png")
-  # plotNameFull <- paste0(dirs$plot, "ic_coef/", plotName)
-  plotNameFull <- paste0(dirs$plot, plotName)
+  # plotNameFull <- file.path(dirs$plot, "ic_coef", plotName)
+  plotNameFull <- file.path(dirs$plot, plotName)
   cat(paste0("File path has ", nchar(plotNameFull), " characters\n"))
   if (nchar(plotNameFull) > 260){
     warning("File path too long, shorten\n")
@@ -1756,8 +1843,6 @@ corrplot_coefficients <- function(input, varNames = NULL, savePNG = TRUE){
   
   if(savePNG) {png(plotNameFull, width = 480, height = 480)}
   
-  # corrplot(M, method = "circle", col = rev(COL2('RdBu', 200)))
-  # corrplot(M, method = "number", col = rev(COL2('RdBu', 200)))
   corrplot::corrplot(M, addCoef.col = 'black', col = rev(COL2('RdBu')), tl.col = "black", tl.pos = "lt")
   
   if(savePNG){
@@ -1770,7 +1855,7 @@ corrplot_coefficients <- function(input, varNames = NULL, savePNG = TRUE){
 }
 
 # ============================================================================ #
-#### 18) Quick CIs based on SEs: ####
+#### 19) Quick CIs based on SEs: ####
 
 quickCI <- function(mod, selEff = NULL, level = 0.95, nRound = 3){
   #' Compute CIs for given lme4 model given SEs from model.
@@ -1802,7 +1887,7 @@ quickCI <- function(mod, selEff = NULL, level = 0.95, nRound = 3){
 }
 
 # ============================================================================ #
-#### 19) Print effect from lme4 model: #####
+#### 20) Print effect from lme4 model: #####
 
 print_effect <- function(mod, eff, nDigit = 3){
   #' Print selected effect from lme4 model
@@ -1889,7 +1974,7 @@ print_effect <- function(mod, eff, nDigit = 3){
 }
 
 # ============================================================================ #
-#### 20) Fit lm per subject: #####
+#### 21) Fit lm per subject: #####
 
 loop_lm_subject <- function(data, formula, isBinomial = F, family = "binomial",
                             subVar = "subject_n"){
@@ -1991,7 +2076,7 @@ loop_lm_subject <- function(data, formula, isBinomial = F, family = "binomial",
 }
 
 # ============================================================================ #
-#### 21) Fit glm per subject: #####
+#### 22) Fit glm per subject: #####
 
 loop_glm_subject <- function(data, formula, family = "binomial", subVar = "subject_n"){
   #' Wrapper on loop_lm_subject to perform glm separately for each subject.
@@ -2010,7 +2095,7 @@ loop_glm_subject <- function(data, formula, family = "binomial", subVar = "subje
 }
 
 # ============================================================================ #
-#### 22) Aggregate data per subject per condition: ####
+#### 23) Aggregate data per subject per condition: ####
 
 aggregate_sub_cond <- function(data, yVar, xVarVec, subVar = "subject_f",
                                format = "long", printSumStats = F){
@@ -2069,7 +2154,7 @@ aggregate_sub_cond <- function(data, yVar, xVarVec, subVar = "subject_f",
 }
 
 # ============================================================================ #
-#### 23) Quick RM-ANOVA: ####
+#### 24) Quick RM-ANOVA: ####
 
 custom_RMANOVA <- function(data, yVar, subVar, ...) {
   #' Remove NAs, 
@@ -2173,7 +2258,7 @@ custom_RMANOVA <- function(data, yVar, subVar, ...) {
 }
 
 # ============================================================================ #
-#### 24) Plot single bar plot with individual data points: ####
+#### 25) Plot single bar plot with individual data points: ####
 
 custom_singlebar <- function(data, yVar, yLim = c(0, 1), isViolin = FALSE, hLine = NULL,
                              selCol = "grey80", xLab = "x", yLab = NULL, main = NULL){
@@ -2307,7 +2392,7 @@ custom_singlebar <- function(data, yVar, yLim = c(0, 1), isViolin = FALSE, hLine
 }
 
 # ============================================================================ #
-#### 25) Barplot 1 IV: Aggregate per condition per subject, plot (1 IV on x-axis): ####
+#### 26) Barplot 1 IV: Aggregate per condition per subject, plot (1 IV on x-axis): ####
 
 custom_barplot1 <- function(data, xVar = NULL, yVar = NULL, subVar = "subject_n", 
                             xLab = NULL, yLab = NULL, main = NULL, selCol = NULL,
@@ -2449,8 +2534,8 @@ custom_barplot1 <- function(data, xVar = NULL, yVar = NULL, subVar = "subject_n"
   cat(paste0("Start plot ", plotName, "\n"))
   
   # Saving:
-  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(paste0(dirs$plotDir, plotName, ".eps"), width = 480, height = 480)}
-  if (savePNG){cat("Save as png\n"); png(paste0(dirs$plotDir, plotName, ".png"), width = 480, height = 480)}
+  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(file.path(dirs$plotDir, paste0(plotName, ".eps")), width = 480, height = 480)}
+  if (savePNG){cat("Save as png\n"); png(file.path(dirs$plotDir, paste0(plotName, ".png")), width = 480, height = 480)}
   
   # -------------------------------------------------------------------------- #
   ## Start ggplot:
@@ -2544,14 +2629,14 @@ custom_barplot1 <- function(data, xVar = NULL, yVar = NULL, subVar = "subject_n"
     dev.off(); 
     print(p)
   }
-  if (saveSVG){save_plot(paste0(dirs$plot, plotName, ".svg"), fig = p, width = 20, height = 20)}
-  if (savePDF){ggsave(paste0(dirs$plot, plotName, ".pdf"), plot = p, width = 20, height = 20, units = "cm")}
+  if (saveSVG){save_plot(file.path(dirs$plot, paste0(plotName, ".svg")), fig = p, width = 20, height = 20)}
+  if (savePDF){ggsave(file.path(dirs$plot, paste0(plotName, ".pdf")), plot = p, width = 20, height = 20, units = "cm")}
   return(p)
   cat("Finished :-)\n")
 }
 
 # ============================================================================ #
-#### 26) Barplot 2 IVs: Aggregate per condition per subject, plot (2 IVs, 1 on x-axis, 1 as color): ####
+#### 27) Barplot 2 IVs: Aggregate per condition per subject, plot (2 IVs, 1 on x-axis, 1 as color): ####
 
 custom_barplot2 <- function(data, xVar, yVar, zVar, subVar = "subject_n", 
                             xLab = NULL, yLab =  NULL, zLab = NULL, main = NULL,
@@ -2687,31 +2772,6 @@ custom_barplot2 <- function(data, xVar, yVar, zVar, subVar = "subject_n",
   aggrData$xpos <- as.numeric(aggrData$x) - min(as.numeric(aggrData$x)) + 1 + ((as.numeric(aggrData$z) - zMid)) * posScale
   aggrData$xj <- aggrData$xpos + aggrData$j # add jitter to xpos
   
-  # ## Add condition variable:
-  # cat("Create condition variable\n")
-  # nZlevel <- length(unique(data$z))
-  # posScale <- 0.05 * (nZlevel + 1)
-  # aggrData$cond <- as.numeric(aggrData$x)*nZlevel - nZlevel + as.numeric(aggrData$z) # necessary for proper axis positions
-  # # aggrData$cond <- 1 + as.numeric(aggrData$x)*2 + as.numeric(aggrData$z)
-  # nCond <- length(unique(aggrData$cond))
-  # if (length(condCol) < nCond){condCol <- rep(condCol, length.out = nCond)}
-  # 
-  # ## Add jittered x-axis for points:
-  # cat("Add jitter for points\n")
-  # aggrData$j <- jitter(rep(0, nrow(aggrData)), amount = jitterSize) # pure jitter .05
-  # if (nZlevel == 2){
-  #   aggrData$xpos <- as.numeric(aggrData$x) - min(as.numeric(aggrData$x)) + 1 + (as.numeric(aggrData$z) - 1.5) * 2 * posScale # convert to [1 2], to [-0.5 0.5], * 2 so [-1 1], scale by 0.15
-  # } else if (nZlevel == 3) {
-  #   zMid <- round(mean(as.numeric(data$z)))
-  #   aggrData$xpos <- as.numeric(aggrData$x) - min(as.numeric(aggrData$x)) + 1 + ((as.numeric(aggrData$z) - zMid)) * posScale  # demean, scale by 0.20
-  # } else {
-  #   zMid <- round(mean(as.numeric(data$z)))
-  #   zScale <- ceiling(max(as.numeric(data$z))) - zMid
-  #   aggrData$xpos <- as.numeric(aggrData$x) - min(as.numeric(aggrData$x)) + 1 + ((as.numeric(aggrData$z) - zMid)) * zScale * posScale  # demean, bring min/max to 1, scale by 0.20
-  #   warning(paste0("Not yet implement for z variable with ", nZlevel, " levels\n"))
-  # }
-  # aggrData$xj <- aggrData$xpos + aggrData$j # add jitter to xpos
-  
   ## Determine y limits if not given:
   if(is.null(yLim)){
     cat("Automatically determine y-axis limits based on per-subject-per-condition means\n")
@@ -2741,8 +2801,8 @@ custom_barplot2 <- function(data, xVar, yVar, zVar, subVar = "subject_n",
   cat(paste0("Start plot ", plotName, "\n"))
   
   ## Saving:
-  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(paste0(dirs$plotDir, plotName, ".eps"), width = 480, height = 480)}
-  if (savePNG){cat("Save as png\n"); png(paste0(dirs$plotDir, plotName, ".png"), width = 480, height = 480)}
+  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(file.path(dirs$plotDir, paste0(plotName, ".eps")), width = 480, height = 480)}
+  if (savePNG){cat("Save as png\n"); png(file.path(dirs$plotDir, paste0(plotName, ".png")), width = 480, height = 480)}
   
   ## Start plot:
   p <- ggplot(summary_d, aes(x, y, fill = z))
@@ -2805,12 +2865,10 @@ custom_barplot2 <- function(data, xVar, yVar, zVar, subVar = "subject_n",
   # Settings:
   if (yLim[1] == 0 & yLim[2] == 1){
     cat("Add y-axis ticks for 0, 0.5, 1\n")
-    # p <- p + scale_y_break(c(0, 0.5, 1))
     p <- p + scale_y_continuous(breaks = seq(0, 1, by = 0.5)) # only 0, 0.5, 1 as axis labels
   }
   if(!(is.null(yLim))){p <- p + coord_cartesian(ylim = yLim)}
-  # if(!(is.null(yLim))){p <- p + scale_y_continuous(limits = yLim, breaks = seq(yLim[1], yLim[-1], (yLim[-1] - yLim[1])/2))}
-  
+
   # Add theme, font sizes:
   cat("Add axis labels, colors, theme, font sizes\n")
   require(ggthemes)
@@ -2836,14 +2894,14 @@ custom_barplot2 <- function(data, xVar, yVar, zVar, subVar = "subject_n",
   
   print(p)
   if(savePNG | saveEPS){dev.off(); print(p)}
-  if (saveSVG){save_plot(paste0(dirs$plot, plotName, ".svg"), fig = p, width = 20, height = 20)}
-  if (savePDF){ggsave(paste0(dirs$plot, plotName, ".pdf"), plot = p, width = 20, height = 20, units = "cm")}
+  if (saveSVG){save_plot(file.path(dirs$plot, paste0(plotName, ".svg")), fig = p, width = 20, height = 20)}
+  if (savePDF){ggsave(file.path(dirs$plot, paste0(plotName, ".pdf")), plot = p, width = 20, height = 20, units = "cm")}
   cat("Finished :-)\n")
   return(p)
 }
 
 # ============================================================================ #
-#### 27) Barplot 3 IVs: Aggregate per condition per subject, plot (3 IVs, 1 on x-axis, 1 as color, 1 as facets): ####
+#### 28) Barplot 3 IVs: Aggregate per condition per subject, plot (3 IVs, 1 on x-axis, 1 as color, 1 as facets): ####
 
 custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_n", 
                             yLab = NULL, xLab = NULL, zLab = NULL, main = NULL,
@@ -2951,8 +3009,7 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
   
   ## Line width:
   if(is.null(LWD)){LWD <- retrieve_plot_defaults("LWD")} # 1.3 # 1.5
-  # if (savePNG | saveEPS){FTS <- retrieve_plot_defaults("FTS")} else {FTS <- 15} # 30
-  
+
   ## Other settings:
   dodgeVal <- 0.6 # displacement of dots
   barWidth <- 0.15 # width of error bars
@@ -2974,11 +3031,9 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
   ## Determine level names if not set as input:
   if(is.null(xLevels)){xLevels <- as.character(levels(data[, xVar])); cat(paste0("Original levels of xVar are: ", paste0(xLevels, collapse = ", "), "\n"))}
   if(is.null(zLevels)){zLevels <- as.character(levels(data[, zVar])); cat(paste0("Original levels of zVar are: ", paste0(zLevels, collapse = ", "), "\n"))}
-  # if (!all(levels(data[, zVar]) == sort(levels(data[, zVar])))){zLevels <- rev(zLevels); cat("Factor levels of zVar not in alphabetical order, invert\n")} # invert levels of z if factor levels not in alphabetical order
   if(is.null(splitLevels)){
     splitLevels <- sort(unique(data[, splitVar]))
     cat(paste0("Original levels of splitVar are: ", paste0(splitVar, collapse = ", "), "\n"))
-    # if (!all(levels(data[, splitVar]) == sort(levels(data[, splitVar])))){splitLevels <- rev(splitLevels); cat("Factor levels of splitVar not in alphabetical order, invert\n")} # invert levels of split if factor levels not in alphabetical order
   }
   
   # -------------------------------------------------------------------------- #
@@ -3027,17 +3082,7 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
   condVec <- sort(unique(data$condition))
   nCond <- length(condVec)
   if(nCondExp != nCond){cat(paste0("Found only ", nCond, " conditions: ", paste0(condVec, collapse = ", "), "\n"))}
-  # stopifnot(min(data$condition) == 1)
-  # stopifnot(max(data$condition) == nCond)
-  
-  # sort(unique(data$condition)) # from 1 to nCond
-  # table(data$condition, data$split) # slowest factor, everything nXlevels*nZlevels times, from 0-nSlevels in ascending order
-  # table(data$condition, data[, splitVar]) # slowest factor, everything nXlevels*nZlevels times, from nSlevels-0 in descending order
-  # table(data$condition, data$x) # middle factor, everything nZlevels times, from 0-nXlevels in ascending order
-  # table(data$condition, data[, xVar]) # middle factor, everything nZlevels times, from nXlevels-0 in descending order
-  # table(data$condition, data$z) # fastest factor, odd and even, from 0-nZlevels in ascending order
-  # table(data$condition, data[, zVar]) # fastest factor, odd and even, from nZlevels-0 in descending order
-  
+
   # -------------------------------------------------------------------------- #
   ## Aggregate data per subject per condition:
   
@@ -3053,11 +3098,6 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
   if (!is.null(splitVar)){
     aggrData$split <- ceiling(aggrData$condition/(nXlevels*nZlevels) - 1)
   }
-  
-  # print(head(aggrData, n = nCond)) # needs to match condition meaning in data object above
-  # table(aggrData$condition, aggrData$split) # slowest factor, everything nXlevels*nZlevels times, from 0-nSlevels in ascending order
-  # table(aggrData$condition, aggrData$x) # middle factor, everything nZlevels times, from 0-nXlevels in ascending order
-  # table(aggrData$condition, aggrData$z) # fastest factor, odd and even, from 0-nZlevels in ascending order
   
   ### Create factors:
   ## Reverse above inversion: xLevelVec is inverted, but xLevels the right way around
@@ -3089,11 +3129,7 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
   
   d <- summarySEwithin(aggrData, measurevar = "y", withinvar = "condition", idvar = "subject", na.rm = T)
   d$condition <- condVec # condition will be from 1 to nCond found; instead overwrite with empirical conditions from previous data set
-  # d$condition <- as.numeric(as.factor(d$condition)) # condition back to numeric
-  # condVec <- sort(unique(d$condition))
-  # nCond <- length(unique(condVec))
-  # cat(paste0("Expected ", nCondExp, " condition levels; found ", nCond, " condition levels, namely ", paste0(condVec, collapse = ", "), "\n"))
-  
+
   ## Recover independent variables from condition:
   d$z <- (d$condition - 1) %% nZlevels # fastest variable
   d$x <- ceiling(d$condition/nZlevels - 1) %% nXlevels # intermediate variable
@@ -3206,7 +3242,7 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
   
   ## Save if requested:
   if (savePNG){
-    plotNameFull <- paste0(dirs$plotDir, plotName, ".png")
+    plotNameFull <- file.path(dirs$plotDir, paste0(plotName, ".png"))
     cat(paste0("Save as ", plotNameFull, "\n"))
     png(plotNameFull, width = 480, height = 480)
     print(p)
@@ -3214,14 +3250,14 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
   }  
   ## Save if requested:
   if (saveEPS){
-    plotNameFull <- paste0(dirs$plotDir, plotName, ".eps")
+    plotNameFull <- file.path(dirs$plotDir, paste0(plotName, ".eps"))
     cat(paste0("Save as ", plotNameFull, "\n"))
     setEPS(); postscript(plotNameFull, width = 480, height = 480)
     print(p)
     dev.off()
   }
-  if (saveSVG){save_plot(paste0(dirs$plot, plotName, ".svg"), fig = p, width = 20, height = 20)}
-  if (savePDF){ggsave(paste0(dirs$plot, plotName, ".pdf"), plot = p, width = 20, height = 20, units = "cm")}
+  if (saveSVG){save_plot(file.path(dirs$plot, paste0(plotName, ".svg")), fig = p, width = 20, height = 20)}
+  if (savePDF){ggsave(file.path(dirs$plot, paste0(plotName, ".pdf")), plot = p, width = 20, height = 20, units = "cm")}
   
   ## Print to console:
   print(p)
@@ -3233,7 +3269,7 @@ custom_barplot3 <- function(data, yVar, xVar, zVar, splitVar, subVar = "subject_
 } # end of function
 
 # ============================================================================ #
-#### 28) Lineplot 1 IV: Aggregate per time point per condition per subject, plot (1 IV for any condition, time on x-axis): ####
+#### 29) Lineplot 1 IV: Aggregate per time point per condition per subject, plot (1 IV for any condition, time on x-axis): ####
 
 custom_lineplot <- function(data, xVar = "counter", yVar = "response_cleaned", zVar = "condition_f", subVar = "subject_n", 
                             xLab = "Time (trial number)", yLab = "p(Go)", main = "",
@@ -3311,8 +3347,8 @@ custom_lineplot <- function(data, xVar = "counter", yVar = "response_cleaned", z
   # -------------------------------------------------------------------------- #
   # Saving:
   
-  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(paste0(dirs$plot, plotName, ".eps"), width = 480, height = 480)}
-  if (savePNG){cat("Save as png\n"); png(paste0(dirs$plot, plotName, ".png"), width = 480, height = 480)}
+  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(file.path(dirs$plot, paste0(plotName, ".eps")), width = 480, height = 480)}
+  if (savePNG){cat("Save as png\n"); png(file.path(dirs$plot, paste0(plotName, ".png")), width = 480, height = 480)}
   
   # -------------------------------------------------------------------------- #
   ### Start plot:
@@ -3347,7 +3383,7 @@ custom_lineplot <- function(data, xVar = "counter", yVar = "response_cleaned", z
 }
 
 # ============================================================================ #
-#### 29) Lineplot 1 IV with ggplot: Aggregate per time point per condition per subject, plot (1 IV for any condition, time on x-axis): ####
+#### 30) Lineplot 1 IV with ggplot: Aggregate per time point per condition per subject, plot (1 IV for any condition, time on x-axis): ####
 
 custom_lineplot_gg <- function(data, xVar, yVar, zVar, subVar = "subject_n", 
                                xLab = NULL, yLab = NULL, main = NULL,
@@ -3456,8 +3492,8 @@ custom_lineplot_gg <- function(data, xVar, yVar, zVar, subVar = "subject_n",
   plotName <- paste0("lineplot_gg_", yVar, "_", xVar, "_", zVar, suffix)
 
   ## Saving:
-  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(paste0(dirs$plot, plotName, ".eps"), width = 480, height = 480)}
-  if (savePNG){cat("Save as png\n"); png(paste0(dirs$plot, plotName, ".png"), width = 480, height = 480)}
+  if (saveEPS){cat("Save as eps\n"); setEPS(); postscript(file.path(dirs$plot, paste0(plotName, ".eps")), width = 480, height = 480)}
+  if (savePNG){cat("Save as png\n"); png(file.path(dirs$plot, paste0(plotName, ".png")), width = 480, height = 480)}
   
   ## Start plot:
   # par(mar = c(5.1, 5.1, 4.1, 2.1)) # bottom, left, top, right
@@ -3541,15 +3577,15 @@ custom_lineplot_gg <- function(data, xVar, yVar, zVar, subVar = "subject_n",
   if(savePNG | saveEPS){dev.off()}
   # par(mar = c(5.1, 4.1, 4.1, 2.1)) # bottom, left, top, right
   
-  if (saveSVG){save_plot(paste0(dirs$plot, plotName, ".svg"), fig = p, width = 20, height = 20)}
-  if (savePDF){ggsave(paste0(dirs$plot, plotName, ".pdf"), plot = p, width = 20, height = 20, units = "cm")}
+  if (saveSVG){save_plot(file.path(dirs$plot, paste0(plotName, ".svg")), fig = p, width = 20, height = 20)}
+  if (savePDF){ggsave(file.path(dirs$plot, paste0(plotName, ".pdf")), plot = p, width = 20, height = 20, units = "cm")}
   
   return(p)
   
 }
 
 # ============================================================================ #
-#### 30) Plot density split by zVar: ####
+#### 31) Plot density split by zVar: ####
 
 customplot_density2 <- function(data, xVar, zVar, 
                                 xLab = NULL, zLab = NULL, xLim = NULL, main = NULL,
@@ -3656,7 +3692,7 @@ customplot_density2 <- function(data, xVar, zVar,
     ## Save:  
     figName <- paste0("density_", xVar, "~", zVar)
     if(addLegend){figName <- paste0(figName, "_addLegend")}
-    png(paste0(dirs$plotDir, figName,  ".png"), width = 480, height = 480)
+    png(file.path(dirs$plotDir, paste0(figName,  ".png")), width = 480, height = 480)
     print(p)
     dev.off()
   }
@@ -3668,6 +3704,329 @@ customplot_density2 <- function(data, xVar, zVar,
   return(p)
   cat("Finished! :-)\n")
   
+}
+
+# ============================================================================ #
+#### 32) Compute Cohen's d and Hedges' g for paired t-test + bootstrapped confidence intervals: ####
+
+compute_cohensD_bootCIs <- function(diffVec, nIter = 10000, CIlevel = 0.95, nRound = 2){
+  #' Compute Cohen's d and Hedges' g for paired t-test + bootstrapped confidence intervals.
+  #' @param diffVec nSub x 1 vector, differences for which to compute effect size.
+  #' @param nIter scalar positive integer, number of iterations (default: 10000).
+  #' @param CIlevel scalar numeric between 0 and 1, confidence interval level (default: 0.95).
+  #' @param nRound scalar positive integer, number of digits to be rounded to (default: 2).
+  #' @return none, just print to console.
+  
+  nSub <- sum(complete.cases(diffVec)) # Count number of subjects
+  cat(paste0("Compute Cohen's d and bootstrapped ", CIlevel*100, "%-CI level based on ", nIter, " iterations for ", nSub, " subjects:\n"))
+  
+  # -------------------------------------------------------------------------- #    
+  ### Loop over iterations:
+  
+  bootVec <- rep(NA, nIter) # initialize
+  for (iIter in 1:nIter){
+    subIdx <- sample(nSub, nSub, replace = T) # sample subject IDs with replacement
+    tmpVec <- diffVec[subIdx] # extract values
+    bootVec[iIter] <- mean(tmpVec)/sd(tmpVec) # compute Cohen's d, store
+  }
+  
+  # -------------------------------------------------------------------------- #    
+  ### Extract percentiles:  
+  
+  CohensD <- mean(diffVec, na.rm = T)/sd(diffVec, na.rm = T)
+  
+  lowerCI <- (1 - CIlevel)/2
+  higherCI <- 1 - lowerCI
+  bootCIVec <- quantile(bootVec, probs = c(lowerCI, higherCI))
+  
+  cat(paste0("Cohen's d = ", round(CohensD, nRound), ", ", CIlevel*100, "%-CI [", round(bootCIVec[1], nRound), " ", round(bootCIVec[2], nRound), "]\n"))
+  
+  # -------------------------------------------------------------------------- #    
+  ### Hedges' g correction:
+  
+  J       <- 1 - 3/(4*nSub - 5); # correction factor
+  hedgesG <- CohensD * J; # correct Cohen's d to get Hedge's g
+  bootGVec <- bootCIVec * J; # Correct bootstrapped CIs
+  
+  cat(paste0("Hedges' g = ", round(hedgesG, nRound), ", ", CIlevel*100, "%-CI [", round(bootGVec[1], nRound), " ", round(bootGVec[2], nRound), "]\n"))
+  
+}
+
+# ============================================================================ #
+#### 33) Plot correlation (scatterplot and regression line) between two variables: ####
+
+plot_correlation <- function(data, xVar, yVar, zVar = NULL, addLegend = T,
+                             isSubLabel = F, subVar = "subject_n", identityLine = F, hLine = NULL, vLine = NULL, isSymmetric = F,
+                             xLab = NULL, yLab = NULL, zLab = NULL, colScale = "viridis", 
+                             main = NULL, printCor = T, isRobust = F, selCol = NULL, nRound = 3,
+                             xLim = NULL, yLim = NULL, xBreakVec = NULL, yBreakVec = NULL,
+                             FTS = NULL, LWD = NULL, MKS = NULL, 
+                             savePNG = F, saveSVG = F, suffix = NULL){
+  #' Plot correlation (scatterplot and regression line) between two variables in data frame with ggplot.
+  #' @param data data frame, trial-by-trial data.
+  #' @param xVar string, name of variable that goes on x-axis. Variable needs to be numeric.
+  #' @param yVar string, name of variable that goes on y-axis. Variable needs to be numeric.
+  #' @param zVar string, name of variable used to colour-code dots; can be numeric or factor (optional).
+  #' @param isSubLabel Boolean, whether to add subject IDs as labels next to dots (T) or not (F) (default: F).
+  #' @param subVar string, name of subject identifier used for labeling points. Variable needs to be numeric.
+  #' @param identityLine Boolean, whether to draw dashed identity line or not (default: F).
+  #' @param hLine scalar numeric, draw horizontal dashed line or not (default: none).
+  #' @param vLine scalar numeric, draw vertical dashed line or not (default: none).
+  #' @param isSymmetric Boolean, whether to use the same axis limits for the x- and y-axis and draw an identity line (default: F).  
+  #' @param xLab string, label for x-axis (default: use value of xVar).
+  #' @param yLab string, label for y-axis (default: use value of yVar).
+  #' @param zLab string, label for colour axis (default: NULL; use value of zVar).
+  #' @param colScale string, colour map from viridis family to use (either "viridis", "plasma", "magma", "inferno").
+  #' @param main string, title (default: none).
+  #' @param printCor Boolean, if no main provided, print correlation or not (default: TRUE).
+  #' @param printCor Boolean, use robust regression (rlm) to draw regression line (default: FALSE).
+  #' @param selCol scalar string, colour of regression line (default: red).
+  #' @param nRound scalar positive integer, number of digits after comma to print for correlation (optional; default: 3).
+  #' @param xLim vector of two numerics, x-axis limits (optional).
+  #' @param yLim vector of two numerics, y-axis limits (optional).
+  #' @param xBreakVec vector of numerics, x-axis break points (optional).
+  #' @param yBreakVec vector of numerics, y-axis break points (optional).
+  #' @param FTS scalar numeric, font size of axes (optional).
+  #' @param LWD scalar numeric, line width (optional).
+  #' @param MKS scalar numeric, marker size (optional).
+  #' @param savePNG Boolean, save as .png file (T) or not (F; default: F).
+  #' @param saveSVG Boolean, save as .svg file (T) or not (F; default: F).
+  #' @param suffix string, string to add at the end of plot name (optional).
+  #' @return creates (and saves) plot.
+  
+  # -------------------------------------------------------------------------- #
+  ## Check inputs:
+  
+  if(!(is.data.frame((data)))){stop("data must be a data frame")}
+  if(!(yVar %in% names(data))){stop("yVar not found in data")}
+  if(!(xVar %in% names(data))){stop("xVar not found in data")}
+  if(!(is.null(zVar))){if(!(zVar %in% names(data))){stop("zVar not found in data")}}
+  if(isSubLabel){if(!(subVar %in% names(data))){stop("subVar not found in data")}}
+  
+  ## Check variable types:
+  if(!(is.numeric(data[, yVar]))){stop("yVar has to be numeric")}
+  if(!(is.numeric(data[, xVar]))){stop("xVar has to be numeric")}
+  # zVar can be either factor or numeric
+  
+  ## Exclude any rows with NAs: 
+  rowIdx <- which(complete.cases(data[, xVar]) & complete.cases(data[, yVar]))
+  cat(paste0("Excluding rows with NA on xVar or yVar: Retain ", length(rowIdx), " out of ", nrow(data), " rows (excluded ", nrow(data) - length(rowIdx), " rows)\n"))
+  data <- droplevels(data[rowIdx, ])
+  
+  # -------------------------------------------------------------------------- #
+  ## Close any open plots:
+  
+  if (length(dev.list() != 0)){dev.off()}
+  
+  # -------------------------------------------------------------------------- #
+  ### Fixed settings:
+  
+  if (is.null(FTS)){FTS <- 20}
+  if (is.null(LWD)){LWD <- 1.3}
+  if (is.null(MKS)){MKS <- 3}
+  subFTS <- 4 # 8
+  if (is.null(nRound)){nRound <- 3} # for print xMin/ xMax/ yMin/ yMax to console
+  
+  nData <- sum(complete.cases(data[, c(xVar, yVar)]))
+  cat(paste0("Plot correlation between ", xVar, " and ", yVar, " given ", nData, " data points\n"))
+  
+  ## Axis labels:
+  if (is.null(xLab)){xLab <- xVar}
+  if (is.null(yLab)){yLab <- yVar}
+  if(!(is.null(zVar))){if (is.null(zLab)){zLab <- zVar}}
+  
+  ## Print correlation as header:
+  if (printCor){
+    if (isRobust){
+      cat("Use robust correlation coefficient (WRS2 package)\n")
+      require(WRS2)
+      test <- WRS2::pbcor(data[, xVar], data[, yVar]) # percentage bend correlation
+      corTitle <- paste0("r = ", round(test$cor, nRound), ", p = ", round(test$p, 3))
+    } else {
+      r <- as.numeric(cor(data[, xVar], data[, yVar], use = "complete.obs"))
+      df <- nData - 2
+      t <- r/sqrt((1 - r^2) / df)
+      p <- pt(abs(t), df, lower.tail = F) * 2
+      corTitle <- paste0("r(", df, ") = ", round(r, nRound), ", p = ", round(p, 3))
+    }
+  }
+  if (!(is.null(main))){ # if title given
+    if (printCor){
+      mainTitle <- paste0(main, ", \n", corTitle)
+    } else {
+      mainTitle <- main
+    }
+  } else { # if no title given
+    if (printCor){
+      mainTitle <- corTitle
+    } else{
+      mainTitle <- ""
+    } 
+  }
+  # cat(paste0(mainTitle, "\n"))
+  
+  # -------------------------------------------------------------------------- #
+  ### Name for saving:
+  
+  ## Compose plot name:  
+  plotName <- paste0("ggplot_correlation_", xVar, "_", yVar)
+  if(!(is.null(zVar))){plotName <- paste0(plotName, "_", zVar)} # add z-var (colour)
+  plotName <- gsub("_f", "", plotName) # remove any variable endings
+  plotName <- gsub("_n", "", plotName) # remove any variable endings
+  if(!(is.null(suffix))){plotName <- paste0(plotName, "_", suffix)} # add suffix
+  if(!(is.null(zVar)) & addLegend){plotName <- paste0(plotName, "_legend")} # add z-var (colour)
+  plotName <- paste0(plotName, "_FTS", FTS) # add font size
+  plotName <- gsub("\\.", "", plotName)
+  
+  ## Save as PNG:
+  if (savePNG){
+    cat(paste0("Save plot under ", plotName, "\n"))
+    png(file.path(dirs$plot, paste0(plotName, ".png")),
+        width = 480, height = 480) # FTS <- 17
+  }
+  
+  # -------------------------------------------------------------------------- #
+  ### Start ggplot:
+  
+  data$x <- data[, xVar]
+  data$y <- data[, yVar]
+  
+  if(!(is.null(zVar))){
+    data$z <- data[, zVar]
+  }
+  
+  ## Add subject labels next to dots:
+  if (isSubLabel){
+    data$subject <- data[, subVar]
+    p <- ggplot(data, aes(x = x, y = y, label = subject)) + 
+      geom_text(hjust = 0, vjust = 0, size = subFTS) # hjust = -0.5
+  } else {
+    p <- ggplot(data, aes(x = x, y = y))
+  }
+  
+  ### Add continuous colour scale for points:
+  # cat("Check\n")
+  if(!(is.null(zVar))){
+    cat("Add colour map for points\n")
+    p <- p + aes(color = z)
+    if (is.numeric(data$z)){
+      # p <- p + scale_colour_viridis_c() # continuous scale
+      p <- p + scale_colour_viridis_c(option = colScale) # viridis, plasma, inferno
+    } else {
+      p <- p + scale_colour_viridis_d(option = colScale) # discrete scale
+    }
+    zLab <- gsub(" ", "\n", zLab) # add new line for each space
+    p <- p + labs(color = zLab) # adjust name of colour legend
+    # p <- p + guides(color = guide_legend(title = zLab)) + theme(legend.margin = margin(-10, -10, -10, -10)) # reduce margin around colour legend
+    # p <- p + theme(legend.box.margin = margin(-20, -10, -10, -10)) # reduce margin around colour legend
+    # p <- p + theme(legend.spacing.x = unit(-2, "cm"))
+  }
+  
+  ### Points for scatter plot:
+  if (!(is.null(selCol))){pointCol <- selCol} else {pointCol <- "black"}
+  p <- p + geom_point(shape = 19, size = MKS, stroke = 0.8, col = pointCol, fill = pointCol) # , fill = "white")
+  
+  ### Regression line:
+  if (!(is.null(selCol))){lineCol <- selCol; shadeCol <- selCol} else {lineCol <- "red"; shadeCol <- "gray"}
+  if (isRobust){
+    # cat("Use robust regression line with MASS::rlm\n")
+    require(MASS)
+    p <- p + geom_smooth(method = MASS::rlm, se = TRUE, col = lineCol, fill = shadeCol, alpha = 0.2, linewidth = 2) # robust regression line
+    # cat("Use quantile regression line with quantreg::rq\n") # no confidence intervals
+    # require(quantreg)
+    # p <- p + geom_smooth(method = quantreg::rq, method.args = list(tau = 0.5), se = F, col = lineCol, fill = shadeCol, alpha = 0.2, linewidth = 2) # robust regression line   
+  } else {
+    p <- p + geom_smooth(method = lm, se = TRUE, col = lineCol, fill = shadeCol, alpha = 0.2, linewidth = 2) # regression line
+  }
+  
+  # -------------------------------------------------------------------------- #
+  ### Horizontal and vertical lines:
+  p <- p + geom_hline(yintercept = 0, linetype = 2, color = "black", size = 1) # horizontal line at 0
+  p <- p + geom_vline(xintercept = 0, linetype = 2, color = "black", size = 1) # vertical line at 0
+  if (!is.null(hLine)){
+    p <- p + geom_vline(xintercept = hLine, linetype = 2, color = "black", size = 1) # horizontal line at hLine
+  }
+  if (!is.null(vLine)){
+    p <- p + geom_vline(xintercept = vLine, linetype = 2, color = "black", size = 1) # vertical line at vLine
+  }
+  
+  ### Identity line:
+  if (isSymmetric){identityLine <- TRUE} # enforce if symmetric
+  if(identityLine){
+    p <- p + geom_abline(slope = 1, intercept = 0, linetype = 2, color = "black", size = 1) # Identity line
+  }
+  
+  # -------------------------------------------------------------------------- #
+  ### Labels:
+  p <- p + xlab(xLab) + ylab(yLab) # Labels
+  
+  ### Title:
+  if (!(is.null(mainTitle))){
+    p <- p + ggtitle(mainTitle)
+  }
+  
+  # -------------------------------------------------------------------------- #
+  ### Add theme:
+  p <- p + theme_classic() + # theme
+    theme(plot.margin = unit(c(0.5, 1.0, 0.5, 0.5), "cm"), # top, right, bottom, left
+          axis.text = element_text(size = FTS, color = "black"),
+          axis.title = element_text(size = FTS, color = "black"), 
+          plot.title = element_text(size = FTS, color = "black", hjust = 0.5), # center title 
+          legend.text = element_text(size = FTS, color = "black"),
+          legend.title = element_text(size = FTS, color = "black"),
+          legend.margin = margin(0, 0, 0, 0, "mm"),
+          axis.line = element_line(colour = 'black', linewidth = LWD))
+  
+  ## Remove legend:
+  if (addLegend == F){
+    cat("Remove colour legend\n")
+    p <- p + theme(legend.position = "none")
+  }
+  
+  # -------------------------------------------------------------------------- #
+  ### Add axis limits:
+  
+  ## Retrieve minimum/maximum of x-/y-variable:
+  xMin <- min(data[, xVar], na.rm = T)
+  xMax <- max(data[, xVar], na.rm = T)
+  yMin <- min(data[, yVar], na.rm = T)
+  yMax <- max(data[, yVar], na.rm = T)
+  
+  ## Enforce same limits for both x and y:
+  if (isSymmetric){
+    xMin <- min(c(xMin, yMin)); yMin <- xMin
+    xMax <- max(c(xMax, yMax)); yMax <- xMax
+  }
+  cat(paste0("X ranges from ", round(xMin, nRound), " to ", round(xMax, nRound), "\n"))
+  cat(paste0("Y ranges from ", round(yMin, nRound), " to ", round(yMax, nRound), "\n"))
+  
+  ## Set limits:
+  if(is.null(xLim)){xLim <- c(xMin, xMax); cat(paste0("Set xLim automatically to ", xMin, " - ", xMax, "\n"))} # define x-axis limits
+  if(is.null(yLim)){yLim <- c(yMin, yMax); cat(paste0("Set yLim automatically to ", yMin, " - ", yMax, "\n"))} # define x-axis limits
+  if (length(xLim) != 2){stop("xLim must be of length 2")}
+  if (length(yLim) != 2){stop("yLim must be of length 2")}
+  
+  ## Add axis limits:
+  p <- p + coord_cartesian(xlim = xLim, ylim = yLim)
+  
+  ## Add break points:
+  if (!(is.null(xBreakVec))){p <- p + scale_x_continuous(breaks = xBreakVec)}
+  if (!(is.null(yBreakVec))){p <- p + scale_y_continuous(breaks = yBreakVec)}
+  
+  # -------------------------------------------------------------------------- #
+  ### Close and save:
+  
+  if (savePNG){
+    print(p)
+    dev.off()
+  }
+  if (saveSVG){
+    cat(paste0("Save ", plotName, " as SVG ...\n"))
+    ggsave(file = file.path(dirs$plot, paste0(plotName, ".svg")), plot = p, width = 14, height = 14, units = "cm")
+  }
+  print(p)
+  return(p)
+  cat("Finished :-)\n")
 }
 
 # END OF FILE.

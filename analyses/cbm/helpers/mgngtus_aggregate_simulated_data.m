@@ -221,6 +221,11 @@ for iSub = 1:nSub % iSub = 1;
         end % end iOut
         % --------------------------------------------------------------- % 
         %% Compute pStay per valence condition:
+
+        % Add valence if needed:
+        if ~isfield(subj, 'valence') && isfield(subj, 'stimuli')
+            subj.valence = 1 - mod(floor((subj.stimuli - 1) / 2), 2);
+        end
         
         iCond = 0; % initialize condition count
 

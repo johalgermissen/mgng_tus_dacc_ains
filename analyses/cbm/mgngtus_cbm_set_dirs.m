@@ -2,18 +2,15 @@ function dirs = mgngtus_cbm_set_dirs()
 
 % Set directories for mgngtus_cbm.
 % 
-% Replace dirs.git and dirs.onedrive with root directories for code and
+% Replace dirs.root with root directories for code and
 % data within your own folder structure.
+% Also add paths to CBM and Brewermap toolboxes at the end.
 %
 % MGNG TUS STUDY, PLYMOUTH.
 % Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 % Should work in MATLAB 2023b.
 
-% we are here:
-% cd C:/Users/johan/OneDrive/Documents/AACollaborations/MGNGUltrasoundNomiki/analyses/cbm
-
 % clear all; close all; clc
-
 
 % fprintf('*** Initialize directories ***\n')
 
@@ -21,8 +18,7 @@ function dirs = mgngtus_cbm_set_dirs()
 dirs            = [];
 
 % Root directories:
-dirs.git        = 'C:/Users/johan/OneDrive/Documents/AACollaborations/MGNGUltrasoundNomiki'; % adjust to local folder structure
-dirs.onedrive   = dirs.git;
+dirs.root       = '...\mgng_tus_dacc_ains'; % adjust to local folder structure
 
 % ----------------------------------------------------------------------- %
 %% Scripts:
@@ -47,14 +43,14 @@ if ~contains(lower(path), lower(fullfile(dirs.modSims))); addpath(dirs.modSims);
 %% Data:
 
 % Input data:
-dirs.data       = fullfile(dirs.onedrive, 'data');
+dirs.data       = fullfile(dirs.root, 'data');
 dirs.input      = fullfile(dirs.data, 'processedData', 'cbm');
 
 % ----------------------------------------------------------------------- %
 %% Results:
 
 % Results:
-dirs.results    = fullfile(dirs.onedrive, 'results', 'cbm');
+dirs.results    = fullfile(dirs.root, 'results', 'cbm');
 if ~exist(dirs.results, 'dir'); mkdir(dirs.results); end
 
 dirs.lap        = fullfile(dirs.results, 'lap');
@@ -86,8 +82,7 @@ if ~exist(dirs.modRecov, 'dir'); mkdir(dirs.modRecov); end
 
 % https://github.com/payampiray/cbm
 
-% fprintf('*** Add CBM ***\n')
-dirs.cbm        = 'C:/Users/johan/OneDrive/Documents/github-repositories/cbm/codes';
+dirs.cbm        = '.../cbm/codes';
 if ~contains(lower(path), lower(fullfile(dirs.cbm))); addpath(dirs.cbm); end
 
 % ----------------------------------------------------------------------- %
@@ -96,8 +91,7 @@ if ~contains(lower(path), lower(fullfile(dirs.cbm))); addpath(dirs.cbm); end
 % https://uk.mathworks.com/matlabcentral/fileexchange/45208-colorbrewer-attractive-and-distinctive-colormaps
 
 % Color map for plots:
-% fprintf('*** Add brewermap ***\n');
-dirs.brewermap  = 'C:/Users/johan/OneDrive/Documents/github-repositories/BrewerMap';
+dirs.brewermap  = '.../BrewerMap';
 if ~contains(lower(path), lower(fullfile(dirs.brewermap))); addpath(dirs.brewermap); end
 
 end % END OF FUNCTION

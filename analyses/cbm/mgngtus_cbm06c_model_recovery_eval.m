@@ -13,15 +13,15 @@
 % Modelled after:
 % https://github.com/johalgermissen/Algermissen2024LM/blob/main/analyses/stan_scripts/model_recovery/eval_model_recovery.R
 %
+% 
 % MGNG TUS STUDY, PLYMOUTH.
 % Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 % Should work in MATLAB 2023b.
 
+% clear all; close all; clc
 
 % ----------------------------------------------------------------------- %
 %% 00a) Set directories:
-
-clear all; close all; clc
 
 % Change directory to location of this file:
 cd(fileparts(matlab.desktop.editor.getActiveFilename));
@@ -33,14 +33,12 @@ dirs            = mgngtus_cbm_set_dirs();
 
 % ----------------- %
 % a) Model:
-modVec      = [1 2 3 14 15 16 20];
+modVec      = 1:7;
 
 nMod        = length(modVec);
 
 % ----------------- %
 % b) Number of simulations:
-% nSim        = 10;
-% nSim        = 100;
 nSim        = 1000;
 
 % ----------------- %
@@ -51,9 +49,7 @@ fitType     = 'lap';
 % ------------------------------------ %
 % d) Plotting settings:
 
-% savePNG     = true;
 savePNG     = false;
-% saveSVG     = true;
 saveSVG     = false;
 
 pauseDuration = 3;
@@ -175,15 +171,9 @@ for iModGen = 1:nMod % iModGen = 1;
 
         % Identify rows:
         rowIdx              = recovMat(:, modGenIdx) == modIDGen & recovMat(:, simIdx) == iSim;
-        % find(rowIdx)
-        % sum(rowIdx)
-        % recovMat(rowIdx, :)
 
         % Determine winning model for this data set:
         [~, winIdx]         = max(recovMat(rowIdx, logEviIdx)); metricName = 'logmodevi';
-        % [~, winIdx]         = max(recovMat(rowIdx, logLikIdx)); metricName = 'loglik';
-        % [~, winIdx]         = min(recovMat(rowIdx, aicIdx)); metricName = 'aic';
-        % [~, winIdx]         = min(recovMat(rowIdx, bicIdx)); metricName = 'bic';
 
         winModVec(iSim)     = modVec(winIdx); % save index of winning model
 
@@ -198,12 +188,6 @@ for iModGen = 1:nMod % iModGen = 1;
 end % end iModGen
 
 if any(round(sum(forwConfMat, 2), 3) ~= 1); error('Columns of forward confusion matrix do not sum up to 1'); end
-
-% Inspect:
-% diag(forwConfMat) % inspect diagonal
-% median(diag(forwConfMat))
-% min(diag(forwConfMat))
-% max(diag(forwConfMat))
 
 % ----------------------------------------------------------------------- %
 %% 02b) Plot forward confusion matrix:
@@ -234,9 +218,6 @@ savePNG = 0; saveSVG = 0;
 if savePNG; saveas(gcf, fullfile(dirs.plot, 'model_recovery', [figName '.png'])); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 
-% pause(pauseDuration);
-% close gcf;
-
 % ----------------------------------------------------------------------- %
 % ----------------------------------------------------------------------- %
 % ----------------------------------------------------------------------- %
@@ -254,12 +235,6 @@ for iModFit = 1:nMod
 end
 
 if any(round(sum(invConfMat, 1), 3) ~= 1); error('Rows of inverse confusion matrix do not sum up to 1'); end
-
-% Inspect:
-% diag(forwConfMat) % inspect diagonal
-median(diag(invConfMat))
-min(diag(invConfMat))
-max(diag(invConfMat))
 
 % ----------------------------------------------------------------------- %
 %% 03b) Plot inverse confusion matrix:
@@ -327,18 +302,12 @@ for iPerm = 1:nPerm
     
             % Identify rows:
             rowIdx              = find(recovMat(:, modGenIdx) == modIDGen & recovMat(:, simIdx) == iSim);
-            % sum(rowIdx)
-            % find(rowIdx)
-            % recovMat(rowIdx, :)    
-    
+
             % Permute order randomly:
             rowIdxPerm          = rowIdx(randperm(length(rowIdx)));
 
             % Find winning index:
             [~, winIdx]         = max(recovMat(rowIdxPerm, logEviIdx));
-            % [~, winIdx]         = max(recovMat(rowIdxPerm, logLikIdx));
-            % [~, winIdx]         = min(recovMat(rowIdxPerm, aicIdx));
-            % [~, winIdx]         = min(recovMat(rowIdxPerm, bicIdx));
 
             winModVec(iSim)     = modVec(winIdx); % save index of winning model
 
@@ -370,17 +339,8 @@ figure; histfit(maxDiagPermVec);
 
 % Plot percentiles:
 fprintf('*** 95th percentile of permutation null distribution with %04d simulations: %.03f ***\n', nSim, prctile(maxDiagPermVec, 95));
-% *** 95th percentile of permutation null distribution with 1000 simulations: 0.171 ***
-% prctile(maxDiagPermVec, [0:5:100])
-% Columns 1 through 17
-% 
-%   0.1410    0.1470    0.1490    0.1510    0.1520    0.1530    0.1540    0.1550    0.1560    0.1570    0.1580    0.1580    0.1590    0.1600    0.1610    0.1620    0.1635
-% 
-% Columns 18 through 21
-% 
-%   0.1650    0.1670    0.1705    0.1890
 
-% Assuming maxDiagPermVec, forwConfMat, and invConfMat are already defined
+% prctile(maxDiagPermVec, [0:5:100])
 
 % ----------------------------------------------------------------------- %
 %% 04c) Plot permutation null distribution as histogram:

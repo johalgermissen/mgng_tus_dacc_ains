@@ -13,15 +13,15 @@
 % Modelled after:
 % https://github.com/johalgermissen/Algermissen2024LM/blob/main/analyses/stan_scripts/model_recovery/run_model_recovery_simulate.R
 % https://github.com/johalgermissen/Algermissen2024LM/blob/main/analyses/stan_scripts/model_recovery/run_model_recovery_fit.R
-%
+% 
 % MGNG TUS STUDY, PLYMOUTH.
 % Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 % Should work in MATLAB 2023b.
 
+% clear all; close all; clc
+
 % ----------------------------------------------------------------------- %
 %% 00a) Set directories:
-
-clear all; close all; clc
 
 % Change directory to location of this file:
 cd(fileparts(matlab.desktop.editor.getActiveFilename));
@@ -38,16 +38,14 @@ nSon            = length(sonVec);
 %% 00c) Flexible settings:
 
 % Model:
-modVec      = [1 2 3 14 15 16 20];
-% modVec      = 1:7;
+modVec      = 1:7;
 
 nMod        = length(modVec);
+
 % Fitting type (parameters to load):
 parType     = 'lap';
 
 % Number of simulations:
-% nSim        = 10;
-% nSim        = 100;
 nSim        = 1000;
 
 % Fit also HBI or not:
@@ -56,7 +54,7 @@ fitType     = 'lap';
 
 %% 01) Load parameters (for all 3 sessions, stack rows) for each model:
 
-for iModGen = 1:nMod % iModGen = 7;
+for iModGen = 1:nMod
 
     % Extract model ID:
     modIDGen        = modVec(iModGen);
@@ -230,7 +228,6 @@ for iModGen = 1:nMod % iModGen = 7;
             modIDGen, modIDFit, nSim);
         fprintf('*** Model output file name will be %s ***\n', modLapFile);
         modLapFullFile      = fullfile(dirs.modRecov, modLapFile);
-        % cd(dirs.modRecov);
 
         % -------------------------------- %
         % Fit model if not existent:

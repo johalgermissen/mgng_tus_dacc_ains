@@ -10,25 +10,21 @@ rm(list = ls())
 #### Set directories, load packages and custom functions: ####
 
 ## Set codeDir:
-codeDir    <- dirname(rstudioapi::getSourceEditorContext()$path)
-helperDir <- paste0(codeDir, "/helpers/")
+currDir    <- dirname(rstudioapi::getSourceEditorContext()$path)
+helperDir <- file.path(currDir, "helpers")
+source(file.path(helperDir, "set_dirs.R")) # Load packages and options settings
 
 ## Load directories:
-rootDir <- paste0(dirname(codeDir), "/")
-source(paste0(helperDir, "set_dirs.R")) # Load packages and options settings
+rootDir <- dirname(dirname(currDir))
 dirs <- set_dirs(rootDir)
 
-## Directory to save data for Julia:
-dirs$cbmDataDir <- paste0(dirs$processedDataDir, "cbm/")
-dir.create(dirs$cbmDataDir, recursive = TRUE, showWarnings = FALSE) # recursive = TRUE)
-
 ## Load packages:
-source(paste0(helperDir, "package_manager.R")) # Load packages and options settings
+source(file.path(dirs$helperDir, "package_manager.R")) # Load packages and options settings
 
 # ------------------------------------------------- #
 ## Load custom functions:
 
-source(paste0(codeDir, "/functions/00_mgngtus_functions_regression.R")) # Load functions
+source(file.path(dirs$funcDir, "00_mgngtus_functions_regression.R")) # Load functions
 
 # ============================================================================ #
 # ============================================================================ #
@@ -36,12 +32,12 @@ source(paste0(codeDir, "/functions/00_mgngtus_functions_regression.R")) # Load f
 #### 01) Read in behavioral data: ####
 
 ## Sham:
-data1 <- read_behavior(paste0(dirs$rawDataDir, "1_sham"))
+data1 <- read_behavior(file.path(dirs$rawDataDir, "1_sham"))
 table(data1$subjectID, data1$stim_ID)
 data1 <- wrapper_preprocessing(data1)
 data1$sonication_n <- 1
 ## dACC:
-data2 <- read_behavior(paste0(dirs$rawDataDir, "2_dacc"))
+data2 <- read_behavior(file.path(dirs$rawDataDir, "2_dacc"))
 table(data2$subjectID, data2$stim_ID)
 table(data2$stim_ID)
 data2 <- wrapper_preprocessing(data2)
@@ -49,7 +45,7 @@ data2$sonication_n <- 2
 table(data2$cueRep_n)
 table(data2$subject_n, data2$cueRep_n)
 ## aIns:
-data3 <- read_behavior(paste0(dirs$rawDataDir, "3_ai"))
+data3 <- read_behavior(file.path(dirs$rawDataDir, "3_ai"))
 table(data3$subjectID, data3$stim_ID)
 data3 <- wrapper_preprocessing(data3)
 data3$sonication_n <- 3
@@ -126,7 +122,7 @@ table(selData$sonication_n)
 table(selData$stimulus_n)
 length(unique(selData$subject_n))
 fileName <- "mgngtus_sham.csv"
-fullFileName <- paste0(dirs$cbmDataDir, fileName)
+fullFileName <- file.path(dirs$cbmDataDir, fileName)
 cat(paste0("Save ", fullFileName, " ...\n"))
 write.csv(selData, fullFileName, row.names = F)
 cat("... finished :-)\n")
@@ -136,7 +132,7 @@ selData <- data[data$sonication_n == 2, selVarNames]
 table(selData$sonication_n)
 table(selData$stimulus_n)
 fileName <- "mgngtus_dACC.csv"
-fullFileName <- paste0(dirs$cbmDataDir, fileName)
+fullFileName <- file.path(dirs$cbmDataDir, fileName)
 cat(paste0("Save ", fullFileName, " ...\n"))
 write.csv(selData, fullFileName, row.names = F)
 cat("... finished :-)\n")
@@ -146,7 +142,7 @@ selData <- data[data$sonication_n == 3, selVarNames]
 table(selData$sonication_n)
 table(selData$stimulus_n)
 fileName <- "mgngtus_aIns.csv"
-fullFileName <- paste0(dirs$cbmDataDir, fileName)
+fullFileName <- file.path(dirs$cbmDataDir, fileName)
 cat(paste0("Save ", fullFileName, " ...\n"))
 write.csv(selData, fullFileName, row.names = F)
 cat("... finished :-)\n")
@@ -157,7 +153,7 @@ names(selData) <- gsub("stimulus_all_n", "stimulus_n", names(selData))
 table(selData$sonication_n)
 table(selData$stimulus_n)
 fileName <- "mgngtus_all.csv"
-fullFileName <- paste0(dirs$cbmDataDir, fileName)
+fullFileName <- file.path(dirs$cbmDataDir, fileName)
 cat(paste0("Save ", fullFileName, " ...\n"))
 write.csv(selData, fullFileName, row.names = F)
 cat("... finished :-)\n")
