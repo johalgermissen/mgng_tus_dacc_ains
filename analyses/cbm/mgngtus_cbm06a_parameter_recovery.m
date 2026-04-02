@@ -50,8 +50,8 @@ fitType     = 'lap';
 % fitType     = 'hbi';
 
 % Plotting settings:
-savePNG   = false;
-saveSVG   = false;
+savePNG     = false;
+saveSVG     = false;
 
 % ----------------------------------------------------------------------- %
 %% 01) Load parameters (for all 3 sessions, stack rows):
@@ -406,7 +406,7 @@ for iParam = 1:nParam
     figName = sprintf(sprintf('parameter_recovery_mod%02d_nSim%04d_%s_param%02d', ...
         modID, nSim, fitType, iParam));
     % savePNG = 0; saveSVG = 0;
-    % savePNG = 1; saveSVG = 1;
+    savePNG = 1; saveSVG = 1;
     if savePNG; saveas(gcf, fullfile(dirs.plot, 'parameter_recovery', [figName '.png'])); end
     if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 
@@ -570,8 +570,8 @@ set(gca, 'Linewidth', LWD, 'FontSize', FTS);
 % Save:
 figName = sprintf(sprintf('permutation_null_distribution_M%0s_nSim%04d_parameter_recovery', ...
     strjoin(string(modVec), '_'), nSim));
-savePNG = 0; saveSVG = 0;
-% savePNG = 1; saveSVG = 1;
+% savePNG = 0; saveSVG = 0;
+savePNG = 1; saveSVG = 1;
 if savePNG; saveas(gcf, fullfile(dirs.plot, 'parameter_recovery', [figName '.png'])); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 

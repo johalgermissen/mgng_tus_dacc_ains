@@ -86,7 +86,7 @@ plotCfg.addLines    = true;
 % Saving settings:
 pauseDur            = 3;
 savePNG             = true;
-saveSVG             = false;
+saveSVG             = true;
 
 % Loop over parameters:
 for iParam = 1:nParamSel % iParam = 1;
@@ -106,7 +106,7 @@ for iParam = 1:nParamSel % iParam = 1;
     figName     = sprintf('param_per_son_%s_mod%02d_%d_%s', ...
         cfg.parType, cfg.modID, paramIdx, paramNames{paramIdx});
     if plotCfg.addLines; figName = [figName '_lines']; end
-    if savePNG; saveas(gcf, fullfile(dirs.final, [figName '.png'])); end
+    if savePNG; saveas(gcf, fullfile(dirs.plot, [figName '.png'])); end
     if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
     pause(pauseDur); close gcf
     

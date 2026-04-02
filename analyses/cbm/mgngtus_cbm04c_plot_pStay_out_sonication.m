@@ -26,9 +26,9 @@ cfg             = mgngtus_cbm_set_config();
 sonVec          = {'sham', 'dACC', 'aIns'};
 nSon            = length(sonVec);
 
-isSim           = false;
+% isSim           = false;
 isSim           = true;
-cfg.iMod        = 20;
+cfg.iMod        = 7;
 pauseDur        = 0; % in seconds
 
 % isElsa          = false;

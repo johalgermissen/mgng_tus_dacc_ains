@@ -57,8 +57,8 @@ custom_lineplot(plotCfg, aggrData.pGoSubCondRep(validSubs, :, :));
 
 % Save:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -108,8 +108,8 @@ custom_lineplot(plotCfg, aggrData.pGoSubCondRep(validSubs, :, :));
 
 % Save:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -193,8 +193,8 @@ custom_barplot(plotCfg, pStayRewGoPunNoGoSon(validSubs, :));
 
 % Save plot:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -271,8 +271,8 @@ custom_barplot(plotCfg, pStayValenceSon(validSubs, :));
 
 % Save plot:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -283,7 +283,7 @@ csvwrite(fullFileName, squeeze(pStayValenceSon(validSubs, :)));
 %% Fig. 3E: Learning curves responses ~ req. action x valence, dACC, simulated.
 
 cfg.dataType    = 'dACC';
-cfg.iMod        = 20;
+cfg.iMod        = 7;
 
 % Load simulated data:
 job.iMod        = cfg.iMod; % number of models to fit
@@ -320,8 +320,8 @@ custom_lineplot(plotCfg, aggrData.pGoSubCondRep(validSubs, :, :));
 
 % Save:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -338,7 +338,7 @@ csvwrite(fullFileName, squeeze(aggrData.pGoSubCondRep(validSubs, 4, :)));
 %% Fig. 3F: Learning curves responses ~ req. action x valence, aIns, simulated.
 
 cfg.dataType    = 'aIns';
-cfg.iMod        = 20;
+cfg.iMod        = 7;
 
 % Load simulated data:
 job.iMod        = cfg.iMod; % number of models to fit
@@ -375,8 +375,8 @@ custom_lineplot(plotCfg, aggrData.pGoSubCondRep(validSubs, :, :));
 
 % Save:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -394,7 +394,7 @@ csvwrite(fullFileName, squeeze(aggrData.pGoSubCondRep(validSubs, 4, :)));
 
 sonVec          = {'sham', 'dACC', 'aIns'};
 nSon            = length(sonVec);
-cfg.iMod        = 20;
+cfg.iMod        = 7;
 
 % Initialize:
 aggrData     = cell(nSon, 1);
@@ -468,8 +468,8 @@ custom_barplot(plotCfg, pStayRewGoPunNoGoSon(validSubs, :));
 
 % Save plot:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -481,7 +481,7 @@ csvwrite(fullFileName, squeeze(pStayRewGoPunNoGoSon(validSubs, :)));
 
 sonVec          = {'sham', 'dACC', 'aIns'};
 nSon            = length(sonVec);
-cfg.iMod        = 20;
+cfg.iMod        = 7;
 
 % Initialize:
 aggrData     = cell(nSon, 1);
@@ -554,8 +554,8 @@ custom_barplot(plotCfg, pStayValenceSon(validSubs, :));
 
 % Save plot:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_rewgo_punnogo_son_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_rewgo_punnogo_son_%s.svg', cfg.plotHandle))); end
 
 % Save source data:

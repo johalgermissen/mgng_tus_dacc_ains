@@ -12,7 +12,8 @@ function dirs = mgngtus_cbm_set_dirs()
 
 % clear all; close all; clc
 
-% fprintf('*** Initialize directories ***\n')
+% ----------------------------------------------------------------------- %
+%% Initialize output object:
 
 % Initialize:
 dirs            = [];

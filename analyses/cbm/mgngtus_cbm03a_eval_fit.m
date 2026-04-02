@@ -17,8 +17,6 @@
 % ----------------------------------------------------------------------- %
 %% 00a) Initialize directories:
 
-clear all; close all; clc
-
 % Change directory to location of this file:
 cd(fileparts(matlab.desktop.editor.getActiveFilename));
 

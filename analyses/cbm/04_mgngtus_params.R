@@ -10,8 +10,8 @@ rm(list = ls())
 #### Set directories, load packages and custom functions: ####
 
 ## Set codeDir:
-currDir    <- dirname(rstudioapi::getSourceEditorContext()$path)
-helperDir <- file.path(currDir, "helpers")
+codeDir    <- dirname(dirname(rstudioapi::getSourceEditorContext()$path))
+helperDir <- file.path(codeDir, "regression", "helpers")
 source(file.path(helperDir, "set_dirs.R")) # Load packages and options settings
 
 ## Load directories:
@@ -137,7 +137,7 @@ formula <- "phi_Int ~ sonication_f + (1|subject_f)"
 formula <- "phi_Dif ~ sonication_f + (1|subject_f)"
 
 # --------------------------------------------------------- #
-## Formula: Control for other parameters:
+## Formula: Control for other parameters b and phi_Int:
 
 formula <- "kappa ~ sonication_f + b_z + (1|subject_f)"
 formula <- "kappa ~ sonication_f + phi_Int_z + (1|subject_f)"

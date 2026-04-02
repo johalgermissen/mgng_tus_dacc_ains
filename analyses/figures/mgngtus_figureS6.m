@@ -69,8 +69,8 @@ for iMod = 1:nMod
     
     % Save:
     savePNG         = true;
-    saveSVG         = false;
-    if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
+    saveSVG         = true;
+    if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('lineplot_pGo_cond_rep_%s.png', cfg.plotHandle))); end
     if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('lineplot_pGo_cond_rep_%s.svg', cfg.plotHandle))); end
     
     % Save source data:
@@ -208,8 +208,8 @@ if exist('suffix', 'var'); figName = [figName suffix]; end
 % Save:
 fprintf('Save figure as %s ...\n', figName);
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, [figName '.png'])); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, [figName '.png'])); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 
 % Save source data:
@@ -276,7 +276,7 @@ for iMod = 1:nMod
     
     % Save:
     savePNG         = true;
-    saveSVG         = false;
+    saveSVG         = true;
     if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_valenced_%s.png', cfg.plotHandle))); end
     if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_valenced_%s.svg', cfg.plotHandle))); end
     
@@ -340,8 +340,8 @@ for iMod = 1:nMod
     
     % Save:
     savePNG         = true;
-    saveSVG         = false;
-    if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_val_%s.png', cfg.plotHandle))); end
+    saveSVG         = true;
+    if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_val_%s.png', cfg.plotHandle))); end
     if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_val_%s.svg', cfg.plotHandle))); end
     
     % Save source data:
@@ -423,8 +423,8 @@ figName     = sprintf('modFreq_PXP_%s', modFile);
 fprintf('Save file as %s ... \n', figName);
 
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, [figName '.png'])); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, [figName '.png'])); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 
 % Save source data:

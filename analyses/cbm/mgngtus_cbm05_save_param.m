@@ -29,7 +29,7 @@ cfg.parType     = 'lap'; % use only for LAP
 cfg.parType     = 'hbi'; % use only for hbi
 
 % c) Model to be loaded:
-cfg.modID       = 1;
+cfg.modID       = 7;
 
 pauseDur        = 1;
 
@@ -41,8 +41,7 @@ mgngtus_cbm_save_param(cfg);
 % ----------------------------------------------------------------------- %
 %% 02) Loop over models, settings, save:
 
-% modVec  = [1:8 14:18];
-modVec  = 20;
+modVec  = 1:7;
 cfg     = [];
 
 for iMod = modVec

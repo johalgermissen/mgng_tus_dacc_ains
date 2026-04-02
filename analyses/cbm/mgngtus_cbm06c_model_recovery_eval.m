@@ -49,9 +49,6 @@ fitType     = 'lap';
 % ------------------------------------ %
 % d) Plotting settings:
 
-savePNG     = false;
-saveSVG     = false;
-
 pauseDuration = 3;
 
 fprintf('*** Evaluate model recovery for models %s based on %d simulations ... ***\n', ...
@@ -213,8 +210,8 @@ mgngtus_custom_corrplot(cfg, forwConfMat);
 % Save:
 figName = sprintf(sprintf('forward_confusion_matrix_M%0s_nSim%04d_%s', ...
     strjoin(string(modVec), '_'), nSim, metricName));
-savePNG = 0; saveSVG = 0;
-% savePNG = 1; saveSVG = 1;
+% savePNG = 0; saveSVG = 0;
+savePNG = 1; saveSVG = 1;
 if savePNG; saveas(gcf, fullfile(dirs.plot, 'model_recovery', [figName '.png'])); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 
@@ -260,8 +257,8 @@ mgngtus_custom_corrplot(cfg, invConfMat);
 % Save:
 figName = sprintf(sprintf('inverse_confusion_matrix_M%0s_nSim%04d_%s', ...
     strjoin(string(modVec), '_'), nSim, metricName));
-savePNG = 0; saveSVG = 0;
-% savePNG = 1; saveSVG = 1;
+% savePNG = 0; saveSVG = 0;
+savePNG = 1; saveSVG = 1;
 if savePNG; saveas(gcf, fullfile(dirs.plot, 'model_recovery', [figName '.png'])); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 
@@ -378,8 +375,8 @@ set(gca, 'Linewidth', LWD, 'FontSize', FTS);
 % Save:
 figName = sprintf(sprintf('permutation_null_distribution_M%0s_nSim%04d_%s', ...
     strjoin(string(modVec), '_'), nSim, metricName));
-savePNG = 0; saveSVG = 0;
-% savePNG = 1; saveSVG = 1;
+% savePNG = 0; saveSVG = 0;
+savePNG = 1; saveSVG = 1;
 if savePNG; saveas(gcf, fullfile(dirs.plot, 'model_recovery', [figName '.png'])); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, [figName '.svg'])); end
 

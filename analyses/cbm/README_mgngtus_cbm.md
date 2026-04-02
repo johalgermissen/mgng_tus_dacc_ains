@@ -60,8 +60,8 @@ Copyright (C) Johannes Algermissen, University of Oxford, Oxford, UK, 2024-2025.
 - *mgngtus_cbm_mod05.m*: Standard Q-learning model with delta learning rule and with Go bias, Pavlovian response bias, and with instrumental learning bias.
 - *mgngtus_cbm_mod06.m*: Standard Q-learning model with delta learning rule and with Go bias, Pavlovian response bias, instrumental learning bias, and single choice perseveration parameter.
 - *mgngtus_cbm_mod07.m*: Standard Q-learning model with delta learning rule and with Go bias,  Pavlovian response bias, instrumental learning bias, intercept perseveration parameter for Avoid cues, difference parameter for Win cues.
-- *mgngtus_cbm_mod08.m*: Standard Q-learning model with delta learning rule and with Go bias, Pavlovian response bias, instrumental learning bias, neutral outcome reinterpretation parameter, perseveration parameter. Only neutral outcomes can be reinterpreted.
-- *mgngtus_cbm_mod09.m*: Standard Q-learning model with delta learning rule and with Go bias, Pavlovian response bias, instrumental learning bias, cue-valence based prediction error boost, perseveration parameter. All outcomes receive cue valence-based boost.
+- *mgngtus_cbm_mod08.m*: Standard Q-learning model with delta learning rule and with Go bias, Pavlovian response bias, instrumental learning bias, cue-valence based prediction error boost, perseveration parameter. All outcomes receive cue valence-based boost.
+- *mgngtus_cbm_mod09.m*: Standard Q-learning model with delta learning rule and with Go bias, Pavlovian response bias, instrumental learning bias, neutral outcome reinterpretation parameter, perseveration parameter. Only neutral outcomes can be reinterpreted.
 
 # modSims
 Model simulation files for all models. Samples new responses given action probabilities (action values/weights transformed by softmax). Samples new outcomes given response and feedback validity on given trial. Sampled behaviour is thus probabilistic; run multiple iterations.

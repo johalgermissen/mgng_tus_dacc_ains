@@ -67,8 +67,8 @@ custom_barplot(plotCfg, aggrData.pStayRespValOut(validSubs, condOrder));
 
 % Save:
 savePNG         = true;
-saveSVG         = false;
-if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_valenced_%s.png', cfg.plotHandle))); end
+saveSVG         = true;
+if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_resp_out_valenced_%s.png', cfg.plotHandle))); end
 if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_valenced_%s.svg', cfg.plotHandle))); end
 
 % Save source data:
@@ -133,8 +133,8 @@ for iMod = 1:nMod
     
     % Save:
     savePNG         = true;
-    saveSVG         = false;
-    if savePNG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_valenced_%s.png', cfg.plotHandle))); end
+    saveSVG         = true;
+    if savePNG; saveas(gcf, fullfile(dirs.plot, sprintf('barplot_pStay_resp_out_valenced_%s.png', cfg.plotHandle))); end
     if saveSVG; saveas(gcf, fullfile(dirs.final, sprintf('barplot_pStay_resp_out_valenced_%s.svg', cfg.plotHandle))); end
     
     % Save source data:
